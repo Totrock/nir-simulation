@@ -6,12 +6,12 @@ Getting started with simulating light propagation using software developed by Pr
 
 ### MCX
 
-Supports CUDA enabled Nvidia grafic cards. Best with dedicated CUDA GPU which is not used for displaying grafics on a monitor.)
+Supports CUDA enabled Nvidia grafic cards. Best with dedicated CUDA GPU which is not used for displaying grafics on a monitor. It seems to be the most used and fastetst simulation of the whole project. 
 
 
 ### MCXLAB 
 
-The functionality of the standalone program MCX is provided as mex file for Matlab or Octave. This version should be preferentially interesting for users who already work with Matlab/Octave.
+The functionality of the standalone program MCX is provided as mex file for Matlab or Octave. This version should be preferentially interesting for users who already work with Matlab/Octave. Many of the examples provided in the git repositories of Prof. Fang use this Matlab syntax. Displaying/Plotting the generated data is more easy in the Matlab environment because there are many prebuilt functions. The support for Octave is not as good as for Matlab, i.e. some functions are missing and some are slower and just a few operating systems are supported.
 
 ### MMC
 
@@ -19,7 +19,7 @@ See more details here: [https://github.com/fangq/mmc](https://github.com/fangq/m
 
 mmc is a Monte Carlo simulation software that is mesh-based. Mesh-based simply means that a complex geometry is described by triangles and tetrahedral elements as usual in finite element simulations. This is said to provide particularly good results when high accuracy is required in the geometry of the simulation, as is the case in medicine, for example. The existence of MMC implicitly assumes that there is another way of describing geometry using voxels. These have disadvantages where the geometry is not bounded along one of the axes in the x, y or z direction ("oblique" surfaces). 
 
-The website [MMC on mcx.space](http://mcx.space/wiki/index.cgi?MMC) neighter mentiones CUDA nor NVIDIA. Does MMC run without GPU acceleration? 
+Since the Version v2020 MMC also supports [GPU acceleration with OpenCL](http://mcx.space/wiki/index.cgi?MMC/Doc/ReleaseNotes/v2020). But with the exact nomenclature it would then be called MMCL or MMCLABCL.
 
 ### MMCLAB
 
@@ -37,6 +37,9 @@ Cross-platform graphical user interface for the stand-alone programs MCX, MMC an
 
 MCX Cloud is a free cloud-computing service provided by Prof. Fangs group to run MCX simulations without requiring users to install their own GPUs.
 
+### Other Utils
+
+Prof. Fang also provides other helpful tools like [zmat](https://github.com/fangq/zmat), [jdata](https://github.com/fangq/jdata), [iso2mesh](https://github.com/fangq/iso2mesh) and others which are partly also used directly by the MCX-Suite.
 
 
 ## Needed software
@@ -65,10 +68,6 @@ sudo apt-get update
 sudo apt install octave
 sudo apt install octave-*
 ```
-
-octave:
-configure window arrangement 
-be aware that file browser = workspace
 
 ## Data preparation
 
