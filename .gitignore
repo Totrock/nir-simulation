@@ -1,5 +1,11 @@
 *.raw
 *.mhd
+*.mc2
+*.mch
+*.tx3
+*.bin
+*.jnii
+*.nii
 .idea
 .ipynb_checkpoints/
 __pycache__/

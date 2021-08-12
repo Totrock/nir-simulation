@@ -62,7 +62,7 @@ cfg.tstep=5e-10;
 cfg.unitinmm = (1024 / v1) * 0.02;
 
 % export the config to a json
-%mcx2json(cfg,'cfg_from_matlab');
+%mcx2json(cfg,'cfg_from_octave');
 
 
 % calculate the fluence distribution with the given config
