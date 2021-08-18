@@ -1,6 +1,12 @@
 addpath(genpath('../MCXStudio/MATLAB'));
 addpath(genpath('../MCXStudio/MCXSuite/mmc/matlab'));
 addpath(genpath('../MCXStudio/MCXSuite/mcxcl/utils'));
+addpath(genpath('../iso2mesh/'));
+addpath(genpath('../zmat/'));
+
+
+% use this line if you want to record the diffuse reflactance directly around the tooth
+volume(volume == 1) = 0;
 
 
 % define the simulation
@@ -56,13 +62,13 @@ cfg.gpuid=1;
 cfg.autopilot=1;
 cfg.tstart=0;
 cfg.tend=5e-9;
-cfg.tstep=5e-10;
+cfg.tstep=5e-9;
 
 % original is 0.02 mm resolution with 1024*1024*517 
 cfg.unitinmm = (1024 / v1) * 0.02;
 
 % export the config to a json
-%mcx2json(cfg,'cfg_from_octave');
+mcx2json(cfg,'mcx_cfg_octave');
 
 
 % calculate the fluence distribution with the given config

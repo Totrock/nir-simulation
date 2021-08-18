@@ -29,6 +29,10 @@ def read_mhd(filename):
     z = dimension[2]
     vol = sitk.GetArrayFromImage(img)
     vol = np.where(vol == 0, 1, vol)
+
+    #
+    #vol = np.where(vol == 1, 0, vol)
+    #
     vol = vol.astype(np.byte)
     return vol, x, y, z
 
@@ -92,9 +96,12 @@ def interpret_output(data):
     fluence_and_dref = data[1]
     # diffuse reflectance has a negative sign: https://github.com/fangq/mcx#volumetric-output
     fluence = np.log(np.where(fluence_and_dref <= 0, VERY_SMALL_NON_ZERO_VALUE, fluence_and_dref))
+    fluence = np.where(fluence < 0, 0, fluence)
+
     dref = np.where(fluence_and_dref < 0, -fluence_and_dref, 0)
     dref = np.where(dref == 0, VERY_SMALL_NON_ZERO_VALUE, dref)
     dref = np.log(dref)
+    dref = np.where(dref < 0, 0, dref)
 
     dref_img = sitk.GetImageFromArray(dref)
     sitk.WriteImage(dref_img, "dref.mhd")
@@ -113,3 +120,5 @@ def run_mcx():
 
 mch_mc2 = run_mcx()
 interpret_output(mch_mc2)
+
+

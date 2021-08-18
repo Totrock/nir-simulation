@@ -1,5 +1,4 @@
-addpath("./read3d/")
-addpath("./read3d/mha")
+addpath(genpath("./read3d/"))
 
 % we cant use this because of Octave
 %volume = ReadData3D("./down256.mhd",false);
