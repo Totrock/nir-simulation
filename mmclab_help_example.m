@@ -1,8 +1,7 @@
-addpath(genpath('/home/josef/MCXStudio/MATLAB'));
-addpath(genpath('/home/josef/MCXStudio/MCXSuite/mmc/matlab'));
-addpath(genpath('/home/josef/MCXStudio/MCXSuite/mcxcl/utils'));
-
-addpath(genpath('/home/josef/iso2mesh/'));
+addpath(genpath('../MCXStudio/MATLAB'));
+addpath(genpath('../MCXStudio/MCXSuite/mmc/matlab'));
+addpath(genpath('../MCXStudio/MCXSuite/mcxcl/utils'));
+addpath(genpath('../iso2mesh/'));
 
 
 cfg.nphoton=1e6;
