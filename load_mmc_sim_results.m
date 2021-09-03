@@ -24,4 +24,3 @@ end
 if(isfield(detphoton,'data'))
   data = detphoton.data;
 end
-

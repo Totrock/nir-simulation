@@ -1,13 +1,10 @@
-addpath(genpath('../MCXStudio/MATLAB'));
-addpath(genpath('../MCXStudio/MCXSuite/mmc/matlab'));
-addpath(genpath('../MCXStudio/MCXSuite/mcxcl/utils'));
-addpath(genpath('../MCXStudio/'));
 clear cfg srcdir fluence detphoton ncfg seeds mesh_diffuse_reflectance_plotted;
 
 % configure the GPU ID!
 %cfg.gpuid=1;
 
-cfg.nphoton=1e6;
+cfg.nphoton=1e8;
+cfg.maxdetphoton = 7e5;
 
 cfg.node = newnode;
 cfg.elem = newelem;
@@ -18,8 +15,8 @@ cfg.srcpos=srcdef.srcpos;
 cfg.srcdir=srcdef.srcdir;
 cfg.srcparam1=srcdef.srcparam1;
 
-%TODO
-cfg.detpos=[unitinmm (y_mm/2)+1 (z_mm/2)+1 0.5];
+detpos = [detpos1 1; detpos2 1];
+cfg.detpos=detpos;
 
 
 % the 5th col of elem contains information about which region the tetrahedron is assigned to 
@@ -43,10 +40,10 @@ cfg.issaveref=1;  % in addition to volumetric fluence, also save surface diffuse
 cfg.issaveexit=1;
 
 %% Use this line to create a json config and many binary files to use mmc directly
-mmc2json(cfg, 'mmc_cfg_octave')
+%mmc2json(cfg, 'mmc_cfg_octave')
 
 %% run the simulation
 [fluence,detphoton,ncfg,seeds]=mmclab(cfg);
 
 save detected_photons.mat detphoton;
-
+save cfg.mat cfg;

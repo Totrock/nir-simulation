@@ -6,6 +6,9 @@
 *.bin
 *.jnii
 *.nii
+*.mat
+*.dat
+*.7z
 .idea
 .ipynb_checkpoints/
 __pycache__/
