@@ -3,7 +3,7 @@ addpath(genpath("./read3d/"))
 % In Matlab one can use the GUI with:
 %volume = ReadData3D("./down256.mhd",false);
 
-volume = mha_read_volume("down64.mhd");
+volume = mha_read_volume("down256.mhd");
 volume = cast(volume,'uint8');
 
 [x,y,z] = size(volume);

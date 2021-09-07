@@ -4,7 +4,9 @@ clear cfg srcdir fluence detphoton ncfg seeds mesh_diffuse_reflectance_plotted;
 %cfg.gpuid=1;
 
 cfg.nphoton=1e8;
-cfg.maxdetphoton = 7e5;
+% could be set lower in many scenarios
+% depends on number, dimensions and positioning of detectors 
+cfg.maxdetphoton = cfg.nphoton/10;
 
 cfg.node = newnode;
 cfg.elem = newelem;
@@ -15,8 +17,7 @@ cfg.srcpos=srcdef.srcpos;
 cfg.srcdir=srcdef.srcdir;
 cfg.srcparam1=srcdef.srcparam1;
 
-detpos = [detpos1 1; detpos2 1];
-cfg.detpos=detpos;
+cfg.detpos=[detpos1 1; detpos2 1];
 
 
 % the 5th col of elem contains information about which region the tetrahedron is assigned to 

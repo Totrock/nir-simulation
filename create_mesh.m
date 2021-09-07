@@ -1,6 +1,6 @@
 volume_for_mesh = volume;
 % prepare the volume, so that it is completly enclosed in 0s
-volume_for_mesh(volume_for_mesh == 1) = 0;
+volume_for_mesh(volume_for_mesh == 0) = 1;
 volume_for_mesh = volume_for_mesh - 1;
 
 clear opt node face elem triangVolume;
@@ -38,40 +38,33 @@ srcdef=struct('srctype','disk',
 % srcdir is irrelevant for the detector, but must be defined nevertheless
 % planar will create a rectangle defined by 4 corners srcpos, srcpos+srcparam1, srcpos+srcparam2, srcpos+srcparam1+srcparam2
 % it has to be called src...
-
-detpos1 = [x_mm/2  y_mm/2 -10*unitinmm];
+detsize = 4;
+detpos1 = [x_mm/2-detsize/2  y_mm/2-detsize/2 -1];
 detdef1 = struct('srctype','planar',
               'srcpos',detpos1,
               'srcdir',[0 0 0],
-              'srcparam1',[2 0 0],
-              'srcparam2',[0 2 0]);
+              'srcparam1',[detsize 0 0],
+              'srcparam2',[0 detsize 0]);
 
 [node,elem]=mmcadddet(node,elem,detdef1);
 
-detpos2 = [unitinmm  y_mm/2 z_mm/2];
+detpos2 = [0  y_mm/2-detsize/2 z_mm/2-detsize/2];
 detdef2 =struct('srctype','planar',
               'srcpos',detpos2,
               'srcdir',[0 0 0],
-              'srcparam1',[0 2 0],
-              'srcparam2',[0 0 2]);
+              'srcparam1',[0 detsize 0],
+              'srcparam2',[0 0 detsize]);
   
 [node,elem]=mmcadddet(node,elem,detdef2);
-
-
 
 newelem = elem;
 newnode = node;
 
-##
-##tooth_fig = figure;
-##plotmesh(node,elem);
-
 tooth_det = figure;
 plotmesh(newnode,newelem);
 
-##tooth_det_src = figure;
-##plotmesh(newnode,newelem);
-
+% the created mesh is now in mm
+unitinmm = 1;
 
 clear opt face ans srcdir tooth_det_src tooth_fig tooth_det triangVolume node elem node_w_det elem_w_det;
 
