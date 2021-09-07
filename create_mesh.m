@@ -19,7 +19,7 @@ opt.A = diag([unitinmm,unitinmm,unitinmm]); % include voxel size in mm as scalin
 opt.B = zeros(3,1); % no translation
 
 [node, elem, face] = v2m(volume_for_mesh, [], opt, triangVolume, 'cgalmesh');
-save data.mat node elem unitinmm x_mm y_mm z_mm;
+save data.mat node elem x_mm y_mm z_mm;
 
 % the information in the 4th col of node is duplicated in elem 5th col (I think)
 node = node(:,1:3);

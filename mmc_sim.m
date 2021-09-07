@@ -36,8 +36,8 @@ cfg.prop=[0 0 1 1;
 cfg.tstart=0;
 cfg.tend=5e-9;
 cfg.tstep=5e-9;
-cfg.debuglevel='TP';
-cfg.issaveref=1;  % in addition to volumetric fluence, also save surface diffuse reflectance
+##cfg.debuglevel='TP';
+##cfg.issaveref=1;  % in addition to volumetric fluence, also save surface diffuse reflectance
 cfg.issaveexit=1;
 
 %% Use this line to create a json config and many binary files to use mmc directly
@@ -46,5 +46,34 @@ cfg.issaveexit=1;
 %% run the simulation
 [fluence,detphoton,ncfg,seeds]=mmclab(cfg);
 
-save detected_photons.mat detphoton;
-save cfg.mat cfg;
+%% save simulation to file
+##save detected_photons.mat detphoton;
+##save cfg.mat cfg;
+
+%% extract detphoton
+if(isfield(detphoton,'detid'))
+  detid = detphoton.detid;
+end
+if(isfield(detphoton,'nscat'))
+  nscat = detphoton.nscat;
+end
+if(isfield(detphoton,'ppath'))
+  ppath = detphoton.ppath;
+end
+if(isfield(detphoton,'p'))
+  p = detphoton.p;
+end
+if(isfield(detphoton,'v'))
+  v = detphoton.v;
+end
+if(isfield(detphoton,'w0'))
+  w0 = detphoton.w0;
+end
+if(isfield(detphoton,'prop'))
+  prop = detphoton.prop;
+end
+if(isfield(detphoton,'data'))
+  data = detphoton.data;
+end
+
+
