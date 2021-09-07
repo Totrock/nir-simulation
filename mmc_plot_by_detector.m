@@ -4,7 +4,6 @@ detectors = unique(detid);
 n_det = size(detectors)(1);
 % create "dynamic arrays" / cells  
 p_by_det = cell(n_det,1);
-v_by_det = cell(n_det,1);
 photonweight_by_det = cell(n_det,1);
 
 ##tpsf_by_det = cell(n_det,1);
@@ -20,7 +19,6 @@ dett=mmcdettime(detphoton,prop,1);
 % I saves for each detected photon by which detector it was detected.
 for j=1:n_det
   p_by_det(j) = p(detectors(j) == detid,:);
-  v_by_det(j) = v(detectors(j) == detid,:);
   photonweight_by_det(j) = detw(detectors(j) == detid,:);
 endfor
 
@@ -29,9 +27,6 @@ endfor
 det1p = [cell2mat(p_by_det(1))' cell2mat(p_by_det(2))']';
 det2p = [cell2mat(p_by_det(3))' cell2mat(p_by_det(4))']';
 
-det1v = [cell2mat(v_by_det(1))' cell2mat(v_by_det(2))']';
-det2v = [cell2mat(v_by_det(3))' cell2mat(v_by_det(4))']';
-
 photonweight_d1 = [cell2mat(photonweight_by_det(1))' cell2mat(photonweight_by_det(2))']';
 photonweight_d2 = [cell2mat(photonweight_by_det(3))' cell2mat(photonweight_by_det(4))']';
 
@@ -39,17 +34,21 @@ binx = 100;
 biny = 100;
 
 % detector 1
+% detector 1 is in the xy-plane z is irrelevant
 det1p = [det1p(:,1) det1p(:,2)];
-
+% create a raster/grid
 [r_edges, c_edges] = edges_from_nbins(det1p, [binx biny]);
+% sort the photons into the raster/grid
 r_idx = lookup (r_edges, det1p(:,1), "l");
 c_idx = lookup (c_edges, det1p(:,2), "l");
+% create empty image
 im = zeros(binx, biny);
+% sum the calculated weights for each pixel
 for j = 1:length(r_idx)
     im(c_idx(j), r_idx(j)) += photonweight_d1(j);
 endfor
 
-figure;
+figure('name','Detector 1 - occlusal');
 imagesc(log(im));
 colorbar;
 
@@ -66,7 +65,7 @@ for j = 1:length(r_idx)
 endfor
 
 
-figure;
+figure('name','Detector 2 - NIRT');
 imagesc(log(im));
 colorbar;
 
