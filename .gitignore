@@ -9,6 +9,9 @@
 *.mat
 *.dat
 *.7z
+*.png
+*.zip
+*.tif
 .idea
 .ipynb_checkpoints/
 __pycache__/
