@@ -7,9 +7,9 @@ function [r_edges, c_edges] = edges_from_nbins (X, nbins)
   ends  = max (X, [], 1);
   ends -= (ends - inits) ./ vec (nbins, 2);
 
-  ## If any histogram side has an empty range, then still make NBINS
-  ## but then place that value at the centre of the centre bin so that
-  ## they appear in the centre in the plot.
+%   If any histogram side has an empty range, then still make NBINS
+%   but then place that value at the centre of the centre bin so that
+%   they appear in the centre in the plot.
   single_bins = inits == ends;
   if (any (single_bins))
     inits(single_bins) -= (floor (nbins(single_bins) ./2)) + 0.5;

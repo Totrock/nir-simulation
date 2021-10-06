@@ -6,9 +6,9 @@ filename = 'down256.mhd';
 [volume, unitinmm] = load_data(filename);
 
 volume(volume == 0) = 1;
-##v_one = ones(256,256,256);
-##v_one(:,:,(256-128):256) = volume;
-##volume = v_one;
+%v_one = ones(256,256,256);
+%v_one(:,:,(256-128):256) = volume;
+%volume = v_one;
 volume(65, :, :)=0;
 volume = cast(volume,'uint8');
 

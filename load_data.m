@@ -15,19 +15,19 @@ function [volume, unitinmm] = load_data(filename)
   % dentin = 3
   % pulp = 4
   
-##  if do_padding
-##    % overwrite each 0 with a 1
-##    volume(volume == 0) = 1;
-##
-##    % pad the volume with a layer of zeros
-##    volume(1,:,:)=0;
-##    volume(:,1,:)=0;
-##    volume(:,:,1)=0;
-##
-##    volume(x,:,:)=0;
-##    volume(:,y,:)=0;
-##    volume(:,:,z)=0;
-##  endif
+%  if do_padding
+%    % overwrite each 0 with a 1
+%    volume(volume == 0) = 1;
+%
+%    % pad the volume with a layer of zeros
+%    volume(1,:,:)=0;
+%    volume(:,1,:)=0;
+%    volume(:,:,1)=0;
+%
+%    volume(x,:,:)=0;
+%    volume(:,y,:)=0;
+%    volume(:,:,z)=0;
+%  endif
 
   % the original µCT has 1024 voxel in x-axis where 1 voxel is 0.02 mm
   % due to downsampling unitinmm is slightly wrong for the z-axis TODO?

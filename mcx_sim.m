@@ -37,14 +37,14 @@ function detphoton = mcx_sim(volume, unitinmm, srcdef, detpos, opts)
   % define the source
   cfg.issrcfrom0=1;
   
-##  cfg.srctype='disk';
-##  cfg.srcpos = [256 256/2 128];
-##  %cfg.srcpos = [256 256/2 127*3/5+128];
-##  srcdir = [-1 0 0];
-##  srcdir = srcdir/norm(srcdir);
-##  cfg.srcdir=srcdir;
-##  cfg.srcparam1=200;
-##  cfg.srcparam2=[0 0 0 0];
+%  cfg.srctype='disk';
+%  cfg.srcpos = [256 256/2 128];
+%  %cfg.srcpos = [256 256/2 127*3/5+128];
+%  srcdir = [-1 0 0];
+%  srcdir = srcdir/norm(srcdir);
+%  cfg.srcdir=srcdir;
+%  cfg.srcparam1=200;
+%  cfg.srcparam2=[0 0 0 0];
 
   cfg.srctype = srcdef.srctype;
   cfg.srcpos = srcdef.srcpos;

@@ -16,9 +16,10 @@ for mcx_input.nphoton = [1e6,1e7,1e8]
                     0.1 2.867 0.99 1.63;
                     0.1 2.867 0.99 1.63;
                     0.35 22.193 0.83 1.49;          
-                    2.8 0 1 1.333]; %water?!
-
-  detphoton = mcx_sim(volume, unitinmm, default_block_mcx_srcdef, default_block_mcx_detpos, mcx_input);
+                    2.8 0 1 1.333]; 
+                    
+  [srcdef, detpos] = default_block_mcx();
+  detphoton = mcx_sim(volume, unitinmm, srcdef, detpos, mcx_input);
 
   plot_opts.unitinmm = unitinmm;
 

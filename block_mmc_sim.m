@@ -8,8 +8,7 @@ for opts.nphoton = [1e6,1e7]
 
   volume = volume + 1;
 
-  srcdef = default_block_mmc_srcdef;
-  detdef = default_block_mmc_detdef;
+  [srcdef, detdef] = default_block_mmc();
                 
   [node, elem, detdef, srcdef] = create_mesh(volume, srcdef, detdef, unitinmm);
 
@@ -17,7 +16,7 @@ for opts.nphoton = [1e6,1e7]
                0.1 2.867 0.99 1.63;
                0.1 2.867 0.99 1.63;
                0.35 22.193 0.83 1.49;        
-               2.8 0 1 1.333]; %water?!
+               2.8 0 1 1.333];
 
   detphoton = mmc_sim(node, elem, detdef, srcdef, opts);
 
