@@ -2,32 +2,42 @@ clear;
 addpaths_turbo;
 
 filename = 'down256.mhd';
-do_padding = false;
 
-src_radius = 6;
-yshift = 0;
-zshift = 0;
-
-[volume, unitinmm, x_mm, y_mm, z_mm] = load_data(filename, do_padding);
+[volume, unitinmm] = load_data(filename);
+[x,y,z] = size(volume);
+x_mm = unitinmm * x;
+y_mm = unitinmm * y;
+z_mm = unitinmm * z;
 
 
 detector_opposite_side = true;
 
 srcdir = [-1 0 0];
 srcdir = srcdir/norm(srcdir);
-srcpos = [x_mm-3 y_mm/2+yshift z_mm*3/5+zshift];
-srcparam1 = [src_radius 0 0];
+srcpos = [x_mm-3 y_mm/2 z_mm*3/5];
+srcparam1 = [6 0 0];
 srcdef=struct('srctype','disk',
               'srcpos',srcpos,
               'srcdir',srcdir,
               'srcparam1',srcparam1);  
+
+detsize = 13;
+detpos = [5 y_mm/2-detsize/2 z_mm/2-detsize/2];
+detdef =struct('srctype','planar',
+              'srcpos',detpos,
+              'srcdir',[1 0 0],
+              'srcparam1',[0 detsize 0],
+              'srcparam2',[0 0 detsize]);
               
-[node, elem, unitinmm, detdef, srcdef] = create_mesh(volume, detector_opposite_side, unitinmm, x_mm, y_mm, z_mm, srcdef);
+[node, elem, detdef, srcdef] = create_mesh(volume, srcdef, detdef, unitinmm);
 
-[detphoton, ppath, p, v, detid, prop] = mmc_sim(node, elem, detdef, srcdef, detector_opposite_side);
+opts.nphoton = 1e6;
+detphoton = mmc_sim(node, elem, detdef, srcdef, opts);
 
-im = mmc_plot_by_detector(detphoton, p, v, prop, detector_opposite_side);
+im = mmc_plot_by_detector(detphoton, detdef.srcdir);
 
 create_png(im, 'mmc');
 
-
+tooth_figure = figure('name','mmc tooth');
+imagesc(log(im));
+colorbar;

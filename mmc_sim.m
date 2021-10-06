@@ -1,18 +1,25 @@
-function [detphoton, ppath, p, v, detid, prop] = mmc_sim(node, elem, detdef, srcdef, detector_opposite_side)
+function detphoton = mmc_sim(node, elem, detdef, srcdef, opts)
 
-  clear cfg srcdir fluence detphoton ncfg seeds;
-
+  if(isstruct(opts))
+    if (~isfield(opts,'nphoton'))
+      opts.nphoton = 1e7;
+    end
+    if (~isfield(opts,'maxdetphoton'))
+      opts.maxdetphoton = opts.nphoton / 5;
+    end
+    if (~isfield(opts,'prop'))
+      opts.prop = default_mmc_prop_kienle();
+    end
+  end
+  
   % configure the GPU ID!
   %cfg.gpuid=1;
 
-  cfg.nphoton=1e8;
+  cfg.nphoton=opts.nphoton;
   % could be set lower in many scenarios
   % depends on number, dimensions and positioning of detectors 
-    if detector_opposite_side
-      cfg.maxdetphoton = cfg.nphoton/10;
-    else
-      cfg.maxdetphoton = cfg.nphoton;
-    endif
+  cfg.maxdetphoton = opts.maxdetphoton;
+  
 
   cfg.node = node;
   cfg.elem = elem;
@@ -34,10 +41,8 @@ function [detphoton, ppath, p, v, detid, prop] = mmc_sim(node, elem, detdef, src
   cfg.elem=cfg.elem(:,1:4);
   %cfg.node=cfg.node(:,1:3);
 
-  cfg.prop=[0 0 1 1;
-            0.1 2.867 0.99 1.63;
-            0.35 22.193 0.83 1.49;          
-            2.8 0 1 1.333]; %water?!
+  cfg.prop= opts.prop;
+
             
              
   cfg.tstart=0;
@@ -60,31 +65,5 @@ function [detphoton, ppath, p, v, detid, prop] = mmc_sim(node, elem, detdef, src
   %% save simulation to file
   ##save detected_photons.mat detphoton;
   ##save cfg.mat cfg;
-
-  %% extract detphoton
-  if(isfield(detphoton,'detid'))
-    detid = detphoton.detid;
-  end
-  if(isfield(detphoton,'nscat'))
-    nscat = detphoton.nscat;
-  end
-  if(isfield(detphoton,'ppath'))
-    ppath = detphoton.ppath;
-  end
-  if(isfield(detphoton,'p'))
-    p = detphoton.p;
-  end
-  if(isfield(detphoton,'v'))
-    v = detphoton.v;
-  end
-  if(isfield(detphoton,'w0'))
-    w0 = detphoton.w0;
-  end
-  if(isfield(detphoton,'prop'))
-    prop = detphoton.prop;
-  end
-  if(isfield(detphoton,'data'))
-    data = detphoton.data;
-  end
 
 end
