@@ -22,7 +22,7 @@ srcdef.srcparam1 = [80 0 0 0];
 detpos = [65 128 127*3/5 100];
 
 
-opts.nphoton = 8e7;
+opts.nphoton = 1e7;
 opts.maxdetphoton = opts.nphoton /2;
 
 img = 0;
@@ -31,11 +31,12 @@ for _ = [1:1]
   detphoton = mcx_sim(volume, unitinmm, srcdef, detpos, opts);
 
   plot_opts.resolution = [200,200];
+  plot_opts.unitinmm = unitinmm;
 
   im = mmc_plot_by_detector(detphoton, [1 0 0], plot_opts);
   img = img + im;
 end
-im2 = img(14:200,28:160);
+im2 = img(14:199,28:160);
 
 create_png(im2, 'mcx');
 

@@ -20,8 +20,9 @@ for mcx_input.nphoton = [1e6,1e7,1e8]
 
   detphoton = mcx_sim(volume, unitinmm, default_block_mcx_srcdef, default_block_mcx_detpos, mcx_input);
 
-  
-  im = mmc_plot_by_detector(detphoton, [1 0 0]);
+  plot_opts.unitinmm = unitinmm;
+
+  im = mmc_plot_by_detector(detphoton, [1 0 0], plot_opts);
 
   im = im(20:105,20:105);
 

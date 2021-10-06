@@ -1,13 +1,16 @@
 function im = mmc_plot_by_detector(detphoton, detdir, opts)
   
-  if nargin == 2
-    binx = 128;
-    biny = 128;
-  else
-    binx = opts.resolution(1);
-    biny = opts.resolution(2);
+  if nargin > 2
+    if (~isfield(opts,'resolution'))
+      opts.resolution = [128, 128];
+    end
+    if (~isfield(opts,'unitinmm'))
+      opts.unitinmm = 1;
+    end
   end
-  
+  binx = opts.resolution(1);
+  biny = opts.resolution(2);
+
   %% extract detphoton
 ##  if(isfield(detphoton,'detid'))
 ##    detid = detphoton.detid;
@@ -34,7 +37,7 @@ function im = mmc_plot_by_detector(detphoton, detdir, opts)
 ##    data = detphoton.data;
 ##  end
 
-  detw=mmcdetweight(detphoton,detphoton.prop,1);
+  detw=mmcdetweight(detphoton,detphoton.prop,opts.unitinmm);
 
   
   % create empty image
