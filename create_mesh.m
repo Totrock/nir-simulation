@@ -34,8 +34,12 @@ function [node, elem, detdef, srcdef] = create_mesh(volume, srcdef, detdef, unit
     
   [node,elem]=mmcadddet(node,elem,detdef);
 
-  tooth_det = figure;
-  plotmesh(node, elem);
+  global DISPLAY_FIGURES;
+  if DISPLAY_FIGURES
+    tooth_det = figure;
+    plotmesh(node, elem);
+  end
+  
 
   % the created mesh is now in mm
   % so basically this is true: unitinmm = 1;

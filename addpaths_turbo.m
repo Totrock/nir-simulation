@@ -15,12 +15,11 @@ graphics_toolkit("fltk");
 % for reading mhd/mha files
 addpath(genpath("./read3d/"))
 
+% for getting default values
 addpath(genpath("./utils/"))
 
-
-% we use functions of this for visualisation
-pkg load statistics;
-
+global DISPLAY_FIGURES;
+DISPLAY_FIGURES = 1;
 
 %% create default values                   
 default_block_mcx_srcdef.srctype = 'disk';

@@ -40,6 +40,9 @@ im2 = img(14:199,28:160);
 
 create_png(im2, 'mcx');
 
-tooth_figure = figure('name','mcx tooth');
-imagesc(log(im2));
-colorbar;
+if DISPLAY_FIGURES
+  tooth_figure = figure('name','mcx tooth');
+  imagesc(log(im2));
+  colorbar;
+end
+

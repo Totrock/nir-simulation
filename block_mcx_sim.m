@@ -26,9 +26,12 @@ for mcx_input.nphoton = [1e6,1e7,1e8]
 
   im = im(20:105,20:105);
 
-  tooth_figure = figure('name',strcat('mcx block ', int2str(mcx_input.nphoton)));
-  imagesc(log(im));
-  colorbar;
+  if DISPLAY_FIGURES
+    tooth_figure = figure('name',strcat('mcx block ', int2str(mcx_input.nphoton)));
+    imagesc(log(im));
+    colorbar;
+  end
+  
 
   create_png(im, 'mcx');
 

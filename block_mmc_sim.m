@@ -2,7 +2,7 @@ clear;
 addpaths_turbo;
 
 filename = 'block.mhd';
-for opts.nphoton = [1e6,1e7,1e8]
+for opts.nphoton = [1e6,1e7]
 
   [volume, unitinmm] = load_data(filename);
 
@@ -25,9 +25,10 @@ for opts.nphoton = [1e6,1e7,1e8]
 
   im = im(20:118,20:118);
 
-  tooth_figure = figure('name',strcat('mmc block ', int2str(opts.nphoton)));  imagesc(log(im));
-  colorbar;
-
+  if DISPLAY_FIGURES
+    tooth_figure = figure('name',strcat('mmc block ', int2str(opts.nphoton)));  
+    imagesc(log(im));
+    colorbar;
+  end
   create_png(im, 'mmc');
-
 end

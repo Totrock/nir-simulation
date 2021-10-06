@@ -9,9 +9,6 @@ x_mm = unitinmm * x;
 y_mm = unitinmm * y;
 z_mm = unitinmm * z;
 
-
-detector_opposite_side = true;
-
 srcdir = [-1 0 0];
 srcdir = srcdir/norm(srcdir);
 srcpos = [x_mm-3 y_mm/2 z_mm*3/5];
@@ -38,6 +35,9 @@ im = mmc_plot_by_detector(detphoton, detdef.srcdir);
 
 create_png(im, 'mmc');
 
-tooth_figure = figure('name','mmc tooth');
-imagesc(log(im));
-colorbar;
+if DISPLAY_FIGURES
+  tooth_figure = figure('name','mmc tooth');
+  imagesc(log(im));
+  colorbar;
+end
+

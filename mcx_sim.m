@@ -73,8 +73,11 @@ function detphoton = mcx_sim(volume, unitinmm, srcdef, detpos, opts)
   % export the config to a json
   %  mcx2json(cfg,'mcx_cfg_octave');
   
-  figure();
-  mcxpreview(cfg);
+  global DISPLAY_FIGURES;
+  if DISPLAY_FIGURES
+    figure();
+    mcxpreview(cfg);
+  end
 
 
   % calculate the fluence distribution with the given config

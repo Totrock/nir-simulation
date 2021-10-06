@@ -1,5 +1,9 @@
 function im = mmc_plot_by_detector(detphoton, detdir, opts)
   
+  if nargin == 2
+    opts.resolution = [128, 128];
+    opts.unitinmm = 1;
+  endif
   if nargin > 2
     if (~isfield(opts,'resolution'))
       opts.resolution = [128, 128];
