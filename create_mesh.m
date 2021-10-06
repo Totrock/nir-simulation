@@ -1,5 +1,6 @@
 function [node, elem, detdef, srcdef] = create_mesh(volume, srcdef, detdef, unitinmm)
-  
+  global DISPLAY_FIGURES;
+
   [x,y,z] = size(volume);
   x_mm = unitinmm * x;
   y_mm = unitinmm * y;
@@ -21,21 +22,29 @@ function [node, elem, detdef, srcdef] = create_mesh(volume, srcdef, detdef, unit
   opt.B = zeros(3,1); % no translation
 
   [node, elem, face] = v2m(volume, [], opt, triangVolume, 'cgalmesh');
-##  save data.mat node elem x_mm y_mm z_mm;
+  % save data.mat node elem x_mm y_mm z_mm;
+  if DISPLAY_FIGURES > 1
+    tooth = figure;
+    plotmesh(node, elem);
+  endif
 
   % the information in the 4th col of node is duplicated in elem 5th col (I think)
   node = node(:,1:3);
 
   [node,elem]=mmcaddsrc(node,elem,srcdef);
 
+  if DISPLAY_FIGURES > 1
+    tooth_src = figure;
+    plotmesh(node, elem);
+  endif
+  
   % srcdir is irrelevant for the detector, but must be defined nevertheless
   % planar will create a rectangle defined by 4 corners srcpos, srcpos+srcparam1, srcpos+srcparam2, srcpos+srcparam1+srcparam2
   % it has to be called src...
     
   [node,elem]=mmcadddet(node,elem,detdef);
 
-  global DISPLAY_FIGURES;
-  if DISPLAY_FIGURES
+  if DISPLAY_FIGURES > 1
     tooth_det = figure;
     plotmesh(node, elem);
   end

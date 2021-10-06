@@ -74,7 +74,7 @@ function detphoton = mcx_sim(volume, unitinmm, srcdef, detpos, opts)
   %  mcx2json(cfg,'mcx_cfg_octave');
   
   global DISPLAY_FIGURES;
-  if DISPLAY_FIGURES
+  if DISPLAY_FIGURES > 1
     figure();
     mcxpreview(cfg);
   end

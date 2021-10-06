@@ -18,6 +18,9 @@ addpath(genpath("./read3d/"))
 % for getting default values
 addpath(genpath("./utils/"))
 
+% 0 -> display no figures
+% 1 -> display generated images
+% 2 -> also display meshes and preview
 global DISPLAY_FIGURES;
 DISPLAY_FIGURES = 1;
 
