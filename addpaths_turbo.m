@@ -22,7 +22,7 @@ addpath(genpath("./utils/"))
 % 1 -> display generated images
 % 2 -> also display meshes and preview
 global DISPLAY_FIGURES;
-DISPLAY_FIGURES = 1;
+DISPLAY_FIGURES = 2;
 
 %% create default values                   
 %mmc 90deg

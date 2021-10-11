@@ -1,4 +1,4 @@
-function detphoton = mmc_sim(node, elem, detdef, srcdef, opts)
+function [fluence, detphoton, cfg] = mmc_sim(node, elem, detdef, srcdef, opts)
 
   if(isstruct(opts))
     if (~isfield(opts,'nphoton'))
@@ -49,8 +49,13 @@ function detphoton = mmc_sim(node, elem, detdef, srcdef, opts)
   cfg.tend=5e-9;
   cfg.tstep=5e-9;
   ##cfg.debuglevel='TP';
-  ##cfg.issaveref=1;  % in addition to volumetric fluence, also save surface diffuse reflectance
+  cfg.issaveref=1;  % in addition to volumetric fluence, also save surface diffuse reflectance
   cfg.issaveexit=1;
+  
+  cfg.outputtype = 'fluence';
+  
+  cfg.isreflect=0;
+%  cfg.method='elem';
 
   %use this for pencil source
   %  cfg.e0 = '-';

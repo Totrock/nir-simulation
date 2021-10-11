@@ -10,22 +10,28 @@ function [node, elem, detdef, srcdef] = create_mesh(volume, srcdef, detdef, unit
   volume(volume == 0) = 1;
   volume = volume - 1;
 
-  % maximum node volume. Increasing this value should
-  % create larger tetrahedra in the centre of an image region.
-  triangVolume = 1000;
+%   maximum node volume. Increasing this value should
+%   create larger tetrahedra in the centre of an image region.
+   triangVolume = 1000;
 
-  % option struct
-  opt.distbound=1;    % set max distance that deviates from the level-set
-  opt.radbound=4;      % set surface triangle maximum size
-  opt.autoregion=0;     % don't save interior points
-  opt.A = diag([unitinmm,unitinmm,unitinmm]); % include voxel size in mm as scaling matrix
-  opt.B = zeros(3,1); % no translation
+%   option struct
+    opt.distbound=1;    % set max distance that deviates from the level-set
+    opt.radbound=1;      % set surface triangle maximum size
+    opt.autoregion=0;     % don't save interior points
+    opt.A = diag([unitinmm,unitinmm,unitinmm]); % include voxel size in mm as scaling matrix
+    opt.B = zeros(3,1); % no translation
 
-  [node, elem, face] = v2m(volume, [], opt, triangVolume, 'cgalmesh');
+  [node, elem, face] = v2m(volume, 1:max(volume(:)), opt, triangVolume, 'cgalmesh');
+
+%%  [node,elem,face]=vol2mesh(volume>0.05,1:size(volume,1),1:size(volume,2),1:size(volume,3),2,2,1);
+
+%% [node,elem,face]=vol2mesh(volume>0.05,1:size(volume,1),1:size(volume,2),1:size(volume,3),0.2,2,1,'simplify');
+
   % save data.mat node elem x_mm y_mm z_mm;
   if DISPLAY_FIGURES > 1
     tooth = figure;
     plotmesh(node, elem);
+    colorbar;
   endif
 
   % the information in the 4th col of node is duplicated in elem 5th col (I think)
@@ -36,6 +42,7 @@ function [node, elem, detdef, srcdef] = create_mesh(volume, srcdef, detdef, unit
   if DISPLAY_FIGURES > 1
     tooth_src = figure;
     plotmesh(node, elem);
+    colorbar;
   endif
   
   % srcdir is irrelevant for the detector, but must be defined nevertheless
@@ -47,6 +54,7 @@ function [node, elem, detdef, srcdef] = create_mesh(volume, srcdef, detdef, unit
   if DISPLAY_FIGURES > 1
     tooth_det = figure;
     plotmesh(node, elem);
+    colorbar;
   end
   
 

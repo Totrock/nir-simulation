@@ -28,8 +28,9 @@ detdef =struct('srctype','planar',
               
 [node, elem, detdef, srcdef] = create_mesh(volume, srcdef, detdef, unitinmm);
 
-opts.nphoton = 1e6;
-detphoton = mmc_sim(node, elem, detdef, srcdef, opts);
+opts.nphoton = 1e7;
+               
+[fluence, detphoton, cfg] = mmc_sim(node, elem, detdef, srcdef, opts);
 
 im = mmc_plot_by_detector(detphoton, detdef.srcdir);
 
@@ -40,4 +41,3 @@ if DISPLAY_FIGURES
   imagesc(log(im));
   colorbar;
 end
-

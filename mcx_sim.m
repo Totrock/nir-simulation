@@ -2,10 +2,13 @@ function detphoton = mcx_sim(volume, unitinmm, srcdef, detpos, opts)
   %todo check nargin
   if(isstruct(opts))
     if (~isfield(opts,'nphoton'))
-      opts.nphoton = 4e7;
+      opts.nphoton = 1e7;
     end
     if (~isfield(opts,'maxdetphoton'))
-      opts.maxdetphoton = opts.nphoton /2;
+      opts.maxdetphoton = opts.nphoton;
+    end
+    if (~isfield(opts,'maxjumpdebug'))
+      opts.maxjumpdebug = opts.nphoton *35;
     end
     if (~isfield(opts,'prop'))
       % with caries unique in vol --> 5 or 6
@@ -19,7 +22,7 @@ function detphoton = mcx_sim(volume, unitinmm, srcdef, detpos, opts)
   % number of photons
   cfg.nphoton=opts.nphoton;
   cfg.maxdetphoton = opts.maxdetphoton;
-  
+%  cfg.maxjumpdebug = opts.maxjumpdebug;
 
   %cfg.vol(:,:,1)=0;   % pad a layer of 0s to get diffuse reflectance
 
@@ -35,28 +38,29 @@ function detphoton = mcx_sim(volume, unitinmm, srcdef, detpos, opts)
   cfg.prop = opts.prop;
 
   % define the source
-  cfg.issrcfrom0=1;
-  
-%  cfg.srctype='disk';
-%  cfg.srcpos = [256 256/2 128];
-%  %cfg.srcpos = [256 256/2 127*3/5+128];
-%  srcdir = [-1 0 0];
-%  srcdir = srcdir/norm(srcdir);
-%  cfg.srcdir=srcdir;
-%  cfg.srcparam1=200;
-%  cfg.srcparam2=[0 0 0 0];
+  cfg.issrcfrom0 = 1;
 
   cfg.srctype = srcdef.srctype;
   cfg.srcpos = srcdef.srcpos;
   cfg.srcdir = srcdef.srcdir;
   cfg.srcparam1 = srcdef.srcparam1;
-  cfg.srcparam2=[0 0 0 0];
+  %cfg.srcparam2 = [0 0 0 0];
 
   cfg.detpos = detpos;
-  cfg.savedetflag='dspmxvw';
+  
+  %    1 D output detector ID (1)
+  %    2 S output partial scat. even counts (#media)
+  %    4 P output partial path-lengths (#media)
+  %    8 M output momentum transfer (#media)
+  %    16 X output exit position (3)
+  %    32 V output exit direction (3)
+  %    64 W output initial weight (1) 
+  
+  cfg.savedetflag='dpx';
+  
   % cfg.bc='______110110';  % capture photons existing from all faces
         
-  cfg.issaveref=1;
+  %cfg.issaveref=1;
 
   cfg.gpuid=1;
   cfg.autopilot=1;
@@ -69,6 +73,9 @@ function detphoton = mcx_sim(volume, unitinmm, srcdef, detpos, opts)
   
   % the previously loaded voxel-volume
   cfg.vol=volume;
+  
+  
+  cfg.isreflect=1;
 
   % export the config to a json
   %  mcx2json(cfg,'mcx_cfg_octave');

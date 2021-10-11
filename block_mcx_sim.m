@@ -1,7 +1,7 @@
 clear;
 addpaths_turbo;
 
-for mcx_input.nphoton = [1e6,1e7,1e8]
+for mcx_input.nphoton = [1e6,1e7]
 
   filename = 'block.mhd';
 

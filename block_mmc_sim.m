@@ -9,6 +9,8 @@ for opts.nphoton = [1e6,1e7]
   volume = volume + 1;
 
   [srcdef, detdef] = default_block_mmc();
+  
+  
                 
   [node, elem, detdef, srcdef] = create_mesh(volume, srcdef, detdef, unitinmm);
 
@@ -18,7 +20,7 @@ for opts.nphoton = [1e6,1e7]
                0.35 22.193 0.83 1.49;        
                2.8 0 1 1.333];
 
-  detphoton = mmc_sim(node, elem, detdef, srcdef, opts);
+  [fluence, detphoton, cfg] = mmc_sim(node, elem, detdef, srcdef, opts);
 
   im = mmc_plot_by_detector(detphoton, detdef.srcdir);
 
