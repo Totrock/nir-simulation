@@ -18,7 +18,7 @@ volume(1:65, :, :)=0;
 mcxplotvol (volume);
 
 % generate the volume for the split voxel simulation
-[volume]=mcxsvmc(volume);
+[volume]=mcxsvmc_octave(volume);
 
 volume = cast(volume,'uint8');
 
@@ -46,7 +46,7 @@ im2 = im(14:199,28:160);
 create_png(im2, 'mcx');
 
 if DISPLAY_FIGURES
-  tooth_figure = figure('name',strcat('mcx tooth', int2str(opts.isreflect)));
+  tooth_figure = figure('name',strcat('mcx tooth', int2str(cfg.isreflect)));
   imagesc(log(im2));
   colorbar;
 end
