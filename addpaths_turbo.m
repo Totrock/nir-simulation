@@ -40,3 +40,7 @@ DISPLAY_FIGURES = 2;
 %                0.35 22.193 0.83 1.49;          
 %                0.35 22.193 0.83 1.49;          
 %                0.35 22.193 0.83 1.49]; %water?!
+
+% for mcxcl
+% mcxlab(cfg,'opencl');
+addpath('/home/probst/bin/mcx/mcxcl/mcxlabcl/');

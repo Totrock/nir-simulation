@@ -1,4 +1,4 @@
-function [node, elem, detdef, srcdef] = create_mesh(volume, srcdef, detdef, unitinmm)
+function [node, elem, detdef, srcdef] = create_mesh(volume, srcdef, detdef, unitinmm, detdef2)
   global DISPLAY_FIGURES;
 
   [x,y,z] = size(volume);
@@ -13,10 +13,12 @@ function [node, elem, detdef, srcdef] = create_mesh(volume, srcdef, detdef, unit
 %   maximum node volume. Increasing this value should
 %   create larger tetrahedra in the centre of an image region.
    triangVolume = 1000;
+%   triangVolume = 100;
 
 %   option struct
     opt.distbound=1;    % set max distance that deviates from the level-set
-    opt.radbound=1;      % set surface triangle maximum size
+    opt.radbound=4;      % set surface triangle maximum size
+%    opt.radbound=1;      % set surface triangle maximum size
     opt.autoregion=0;     % don't save interior points
     opt.A = diag([unitinmm,unitinmm,unitinmm]); % include voxel size in mm as scaling matrix
     opt.B = zeros(3,1); % no translation
@@ -57,6 +59,15 @@ function [node, elem, detdef, srcdef] = create_mesh(volume, srcdef, detdef, unit
     colorbar;
   end
   
+  if nargin > 4
+    [node,elem]=mmcadddet(node,elem,detdef2);
+
+    if DISPLAY_FIGURES > 1
+      tooth_det = figure;
+      plotmesh(node, elem);
+      colorbar;
+    end
+  end
 
   % the created mesh is now in mm
   % so basically this is true: unitinmm = 1;

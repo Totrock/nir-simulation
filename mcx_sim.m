@@ -1,4 +1,4 @@
-function detphoton = mcx_sim(volume, unitinmm, srcdef, detpos, opts)
+function [detphoton,cfg] = mcx_sim(volume, unitinmm, srcdef, detpos, opts)
   %todo check nargin
   if(isstruct(opts))
     if (~isfield(opts,'nphoton'))
@@ -14,8 +14,11 @@ function detphoton = mcx_sim(volume, unitinmm, srcdef, detpos, opts)
       % with caries unique in vol --> 5 or 6
       opts.prop = default_mcx_prop_kienle();
     end
+    if (~isfield(opts,'isreflect'))
+      opts.isreflect = 1;
+    end
   end
-
+  
   % use this line if you want to record the diffuse reflactance directly around the tooth
   %volume(volume == 1) = 0;
 
@@ -75,20 +78,19 @@ function detphoton = mcx_sim(volume, unitinmm, srcdef, detpos, opts)
   cfg.vol=volume;
   
   
-  cfg.isreflect=1;
+  cfg.isreflect=opts.isreflect;
 
   % export the config to a json
   %  mcx2json(cfg,'mcx_cfg_octave');
   
   global DISPLAY_FIGURES;
-  if DISPLAY_FIGURES > 1
+  if DISPLAY_FIGURES > 1 & length(size(cfg.vol)) == 3
     figure();
     mcxpreview(cfg);
   end
 
 
   % calculate the fluence distribution with the given config
-  
-  [fluence,detphoton,vol,seeds,traj]=mcxlab(cfg);  
+  [fluence,detphoton,vol,seeds,traj]=mcxlab(cfg); 
 end
 

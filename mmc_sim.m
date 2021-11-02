@@ -10,10 +10,17 @@ function [fluence, detphoton, cfg] = mmc_sim(node, elem, detdef, srcdef, opts)
     if (~isfield(opts,'prop'))
       opts.prop = default_mmc_prop_kienle();
     end
+    if (~isfield(opts,'isreflect'))
+      opts.isreflect = 1;
+    end
+    if (~isfield(opts,'issaveexit'))
+      opts.issaveexit = 1;
+    end
   end
   
   % configure the GPU ID!
-  %cfg.gpuid=1;
+  cfg.gpuid='11';
+  cfg.workload = [5,1];
 
   cfg.nphoton=opts.nphoton;
   % could be set lower in many scenarios
@@ -50,12 +57,18 @@ function [fluence, detphoton, cfg] = mmc_sim(node, elem, detdef, srcdef, opts)
   cfg.tstep=5e-9;
   ##cfg.debuglevel='TP';
   cfg.issaveref=1;  % in addition to volumetric fluence, also save surface diffuse reflectance
-  cfg.issaveexit=1;
+  cfg.issaveexit = opts.issaveexit; 
+  
+  if cfg.issaveexit == 2
+    cfg.detpos = [detdef.srcpos 0];
+    cfg.detparam1 = [12 0 0 128];
+    cfg.detparam2 = [0 12 0 128];
+  end
   
   cfg.outputtype = 'fluence';
   
-  cfg.isreflect=0;
-%  cfg.method='elem';
+  cfg.isreflect = opts.isreflect;
+  cfg.method='elem';
 
   %use this for pencil source
   %  cfg.e0 = '-';
@@ -65,7 +78,7 @@ function [fluence, detphoton, cfg] = mmc_sim(node, elem, detdef, srcdef, opts)
   %mmc2json(cfg, 'mmc_cfg_octave')
 
   %% run the simulation
-  [fluence,detphoton,ncfg,seeds]=mmclab(cfg);
+  [fluence,detphoton,ncfg,seeds] = mmclab(cfg);
 
   %% save simulation to file
   ##save detected_photons.mat detphoton;
