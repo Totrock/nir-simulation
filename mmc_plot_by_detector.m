@@ -1,26 +1,29 @@
 function im = mmc_plot_by_detector(detphoton, detdir, opts)
   
+  % number of arguments passed to the script
+  % fill in defaults...
   if nargin == 2
-    opts.resolution = [128, 128];
+    opts.resolution = [250, 250];
     opts.unitinmm = 1;
+    opts.filterV = 0;
   endif
   if nargin > 2
     if (~isfield(opts,'resolution'))
-      opts.resolution = [128, 128];
+      opts.resolution = [250, 250];
     end
     if (~isfield(opts,'unitinmm'))
       opts.unitinmm = 1;
     end
+    if (~isfield(opts,'filterV'))
+      opts.filterV = 0;
+    end
   end
-  binx = opts.resolution(1);
-  biny = opts.resolution(2);
+  biny = opts.resolution(1);
+  binx = opts.resolution(2);
 
   %% extract detphoton
 ##  if(isfield(detphoton,'detid'))
 ##    detid = detphoton.detid;
-##  end
-##  if(isfield(detphoton,'nscat'))
-##    nscat = detphoton.nscat;
 ##  end
 ##  if(isfield(detphoton,'ppath'))
 ##    ppath = detphoton.ppath;
@@ -31,30 +34,38 @@ function im = mmc_plot_by_detector(detphoton, detdir, opts)
   if(isfield(detphoton,'v'))
     v = detphoton.v;
   end
-##  if(isfield(detphoton,'w0'))
-##    w0 = detphoton.w0;
-##  end
-##  if(isfield(detphoton,'prop'))
-##    prop = detphoton.prop;
-##  end
-##  if(isfield(detphoton,'data'))
-##    data = detphoton.data;
-##  end
+  if(isfield(detphoton,'prop'))
+    prop = detphoton.prop;
+  end
 
-  detw=mmcdetweight(detphoton,detphoton.prop,opts.unitinmm);
-
+  % calculate the weight of each photon
+  detw=mmcdetweight(detphoton, prop, opts.unitinmm);
   
-  % create empty image
-  im = zeros(binx, biny);
-
+  % find out in which plane the detector is
   if detdir(1) == 1  
     p = [p(:,2) p(:,3)];
+    v_dir = 1;
   elseif detdir(2) == 1
     p = [p(:,1) p(:,3)];
+    v_dir = 2;
   else
     p = [p(:,1) p(:,2)];
+    v_dir = 3;
+  end
+
+  
+  %%%%%%%%%%%%%%%%%%%%
+  % kind of a lens
+  %%%%%%%%%%%%%%%%%%%%
+  if opts.filterV
+    v_idx1 = abs(v(:,v_dir)) != 1;
+    v_idx2 = abs(v(:,v_dir)) > 0.99;
+    v = v(v_idx1&v_idx2,:);
+    p = p(v_idx1&v_idx2,:);
   end
   
+  % create empty image
+  im = zeros(biny, binx);
 
   [r_edges, c_edges] = edges_from_nbins(p, [binx biny]);
   r_idx = lookup (r_edges, p(:,1), "l");
@@ -62,11 +73,6 @@ function im = mmc_plot_by_detector(detphoton, detdir, opts)
   for j = 1:length(r_idx)
       im(c_idx(j), r_idx(j)) += detw(j);
   endfor
-
-
-##  tooth_figure = figure('name','Detector 2 - NIRT');
-##  imagesc(log(im));
-##  colorbar;
 
 
 ##    % detector 1

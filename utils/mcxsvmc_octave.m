@@ -1,4 +1,4 @@
-function [bmask,uniqidx,nc,nn,totalarea,iso]=mcxsvmc(vol, varargin)
+function [bmask,uniqidx,nc,nn,totalarea,iso]=mcxsvmc_octave(vol, varargin)
 %
 % Format:
 %    newvol=mcxsvmc(vol)
@@ -95,7 +95,7 @@ for i=1:length(labels)
     % convert each label into a binary mask, smooth it, then extract the
     % isosurface using marching cube algorithm (matlab builtin)
     if(dosmooth)
-        volsmooth=smooth3(vol==labels(i),'g',ksize,kstd);
+        volsmooth=smooth3(double(vol==labels(i)),'g',ksize,kstd);
     else
         volsmooth=(vol==labels(i));
     end
@@ -200,23 +200,10 @@ if(curveonly)
 end
 
 %% discretize nn and nc vector components to 0-255 gray-scale numbers
-edge_c = linspace(0,1,256);
-edge_n = linspace(0,1,256);
 
 nc=nc-floor(nc);
-nc(:,1) = lookup (edge_c, nc(:,1), "l");
-nc(:,2) = lookup (edge_c, nc(:,2), "l");
-nc(:,3) = lookup (edge_c, nc(:,3), "l");
-nc = nc - 1;
-nn = nn * -1;
-nn = (nn+1)/2;
-nn(:,1) = lookup (edge_n, nn(:,1), "l");
-nn(:,2) = lookup (edge_n, nn(:,2), "l");
-nn(:,3) = lookup (edge_n, nn(:,3), "l");
-nn = nn - 1;
-%nn1 = nn;
-%nc1 = nc;
-%save 'nnn.mat' nn1 nc1;
+nc=floor(nc*255);
+nn=min(floor((nn+1)*255/2),254);
 
 %% assemble the final volume
 if(nargout==1)

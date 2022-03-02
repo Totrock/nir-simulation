@@ -12,32 +12,58 @@ function [node, elem, detdef, srcdef] = create_mesh(volume, srcdef, detdef, unit
 
 %   maximum node volume. Increasing this value should
 %   create larger tetrahedra in the centre of an image region.
-   triangVolume = 1000;
-%   triangVolume = 100;
+%   triangVolume = 1000;
+   triangVolume = 100;
 
 %   option struct
     opt.distbound=1;    % set max distance that deviates from the level-set
-    opt.radbound=4;      % set surface triangle maximum size
+    opt.radbound=4;      % set surface triangle maximum size perv 4
 %    opt.radbound=1;      % set surface triangle maximum size
-    opt.autoregion=0;     % don't save interior points
+%    opt.autoregion=0;     % don't save interior points
     opt.A = diag([unitinmm,unitinmm,unitinmm]); % include voxel size in mm as scaling matrix
     opt.B = zeros(3,1); % no translation
 
   [node, elem, face] = v2m(volume, 1:max(volume(:)), opt, triangVolume, 'cgalmesh');
+  
+%  [node,elem]=sortmesh([],node,elem,1:4); % Sort nodes and elements;
+%   elem=meshreorient(node,elem); % Re-orient elements;
+%  elem=meshreorient(node,elem);
 
 %%  [node,elem,face]=vol2mesh(volume>0.05,1:size(volume,1),1:size(volume,2),1:size(volume,3),2,2,1);
 
 %% [node,elem,face]=vol2mesh(volume>0.05,1:size(volume,1),1:size(volume,2),1:size(volume,3),0.2,2,1,'simplify');
 
+  % the information in the 4th col of node is duplicated in elem 5th col (I think)
+  
+%  node = node(:,1:3);
+
+%    tooth_mesh_figure = figure('name','basic mesh');
+%    mcxplotvol(volume);
+%    colorbar;
+    
   % save data.mat node elem x_mm y_mm z_mm;
+  
+  %use this to view only dentin or pulp
+  % ausblendne von schmlez / dnetin
   if DISPLAY_FIGURES > 1
-    tooth = figure;
-    plotmesh(node, elem);
-    colorbar;
+%    tooth_mesh_figure = figure('name','basic mesh1');
+%    plotmesh(node, elem(elem(:,5)>0,:));
+%    colorbar;
+%    colormap ('rainbow');
+%    
+%    tooth_mesh_figure = figure('name','basic mesh2');
+%    plotmesh(node(:,1:3), elem(elem(:,5)>1,:));
+%    colorbar;
+%    colormap ('rainbow');
+%   
+%    tooth_mesh_figure = figure('name','basic mesh3');
+%    plotmesh(node(:,1:3), elem(elem(:,5)>2,:));
+%    colorbar;
+%    colormap ('rainbow');
+    
   endif
 
-  % the information in the 4th col of node is duplicated in elem 5th col (I think)
-  node = node(:,1:3);
+  
 
   [node,elem]=mmcaddsrc(node,elem,srcdef);
 
@@ -72,7 +98,3 @@ function [node, elem, detdef, srcdef] = create_mesh(volume, srcdef, detdef, unit
   % the created mesh is now in mm
   % so basically this is true: unitinmm = 1;
 end
-
-
-
-

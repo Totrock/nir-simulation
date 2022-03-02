@@ -91,6 +91,6 @@ function [detphoton,cfg] = mcx_sim(volume, unitinmm, srcdef, detpos, opts)
 
 
   % calculate the fluence distribution with the given config
-  [fluence,detphoton,vol,seeds,traj]=mcxlab(cfg); 
+  [fluence,detphoton]=mcxlab(cfg); 
 end
 

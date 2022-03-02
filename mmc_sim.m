@@ -1,5 +1,6 @@
 function [fluence, detphoton, cfg] = mmc_sim(node, elem, detdef, srcdef, opts)
 
+  % load defaults if needed
   if(isstruct(opts))
     if (~isfield(opts,'nphoton'))
       opts.nphoton = 1e7;
@@ -8,7 +9,7 @@ function [fluence, detphoton, cfg] = mmc_sim(node, elem, detdef, srcdef, opts)
       opts.maxdetphoton = opts.nphoton / 5;
     end
     if (~isfield(opts,'prop'))
-      opts.prop = default_mmc_prop_kienle();
+      opts.prop = prop_mcx_780nm();
     end
     if (~isfield(opts,'isreflect'))
       opts.isreflect = 1;
@@ -19,15 +20,15 @@ function [fluence, detphoton, cfg] = mmc_sim(node, elem, detdef, srcdef, opts)
   end
   
   % configure the GPU ID!
-  cfg.gpuid='11';
-  cfg.workload = [5,1];
+  % one could use this ratio, but the speedup is not really worth it
+%  cfg.gpuid='11';
+%  cfg.workload = [14,1];
 
   cfg.nphoton=opts.nphoton;
   % could be set lower in many scenarios
   % depends on number, dimensions and positioning of detectors 
   cfg.maxdetphoton = opts.maxdetphoton;
   
-
   cfg.node = node;
   cfg.elem = elem;
 
@@ -53,16 +54,15 @@ function [fluence, detphoton, cfg] = mmc_sim(node, elem, detdef, srcdef, opts)
             
              
   cfg.tstart=0;
-  cfg.tend=5e-9;
-  cfg.tstep=5e-9;
-  ##cfg.debuglevel='TP';
-  cfg.issaveref=1;  % in addition to volumetric fluence, also save surface diffuse reflectance
-  cfg.issaveexit = opts.issaveexit; 
+  cfg.tend=1e-5;
+  cfg.tstep=1e-5;
+  cfg.issaveref=1;  % save surface diffuse reflectance
+  cfg.issaveexit = opts.issaveexit; % save photons which hit a detector (detphoton)
   
   if cfg.issaveexit == 2
     cfg.detpos = [detdef.srcpos 0];
-    cfg.detparam1 = [12 0 0 128];
-    cfg.detparam2 = [0 12 0 128];
+    cfg.detparam1 = [sum(detdef.srcparam1) 0 0 400];
+    cfg.detparam2 = [0 sum(detdef.srcparam1) 0 400];
   end
   
   cfg.outputtype = 'fluence';
@@ -70,9 +70,8 @@ function [fluence, detphoton, cfg] = mmc_sim(node, elem, detdef, srcdef, opts)
   cfg.isreflect = opts.isreflect;
   cfg.method='elem';
 
-  %use this for pencil source
-  %  cfg.e0 = '-';
-
+  % the pencil source needs this
+%  cfg.e0 = '-';
 
   %% Use this line to create a json config and many binary files to use mmc directly
   %mmc2json(cfg, 'mmc_cfg_octave')

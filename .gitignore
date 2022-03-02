@@ -19,3 +19,4 @@ pymcx/cfg_from_python.json
 pymcx/cfg_from_python_detp.jdat
 pymcx/testarea.py
 pymcx/tooth.vtk
+probablyNotNeededAnymore/
