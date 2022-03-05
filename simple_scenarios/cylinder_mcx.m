@@ -41,6 +41,7 @@ cfg.tstep = 1;
 
 cfg.unitinmm = unitinmm;
 
+
 for cfg.isreflect = [0:1] 
 
   [fluence,detphoton,vol,seeds,traj]=mcxlab(cfg);

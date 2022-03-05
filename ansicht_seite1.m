@@ -5,7 +5,7 @@ addpaths_turbo;
 molar_dir = '/home/probst/data/praemolar/';
 files = dir(molar_dir);
 for file = files'
-    if regexp(file.name, '5769.raw rotated_256*.mhd')
+    if regexp(file.name, '5776.raw rotated_256*.mhd')
       filename = strcat(molar_dir, file.name);
       
       [volume, unitinmm] = load_data(filename);
@@ -23,8 +23,8 @@ for file = files'
       volume(volume == 0) = 1;
       volume = volume - 1;
       triangVolume = 100;
-      opt.distbound=1;
-      opt.radbound=1;  
+      opt.distbound=2;
+      opt.radbound=2;  
       opt.autoregion=0; 
       opt.A = diag([unitinmm,unitinmm,unitinmm]); 
       opt.B = zeros(3,1);

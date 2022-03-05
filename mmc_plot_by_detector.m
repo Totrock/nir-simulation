@@ -22,12 +22,6 @@ function im = mmc_plot_by_detector(detphoton, detdir, opts)
   binx = opts.resolution(2);
 
   %% extract detphoton
-##  if(isfield(detphoton,'detid'))
-##    detid = detphoton.detid;
-##  end
-##  if(isfield(detphoton,'ppath'))
-##    ppath = detphoton.ppath;
-##  end
   if(isfield(detphoton,'p'))
     p = detphoton.p;
   end
@@ -53,20 +47,27 @@ function im = mmc_plot_by_detector(detphoton, detdir, opts)
     v_dir = 3;
   end
 
-  
   %%%%%%%%%%%%%%%%%%%%
-  % kind of a lens
+  % ignore all photons that hit the detector in a 90° angle
+  % almost all images were created without this
   %%%%%%%%%%%%%%%%%%%%
   if opts.filterV
     v_idx1 = abs(v(:,v_dir)) != 1;
+    v = v(v_idx1,:);
+    p = p(v_idx1,:);
+  end
+  %%%%%%%%%%%%%%%%%%%%
+  % kind of a pinhole lens / Collimator
+  %%%%%%%%%%%%%%%%%%%%
+  if opts.filterV
     v_idx2 = abs(v(:,v_dir)) > 0.99;
-    v = v(v_idx1&v_idx2,:);
-    p = p(v_idx1&v_idx2,:);
+    v = v(v_idx2,:);
+    p = p(v_idx2,:);
   end
   
   % create empty image
   im = zeros(biny, binx);
-
+  % sort the photons into a grid
   [r_edges, c_edges] = edges_from_nbins(p, [binx biny]);
   r_idx = lookup (r_edges, p(:,1), "l");
   c_idx = lookup (c_edges, p(:,2), "l");
@@ -74,21 +75,4 @@ function im = mmc_plot_by_detector(detphoton, detdir, opts)
       im(c_idx(j), r_idx(j)) += detw(j);
   endfor
 
-
-##    % detector 1
-##    % detector 1 is in the xy-plane z is irrelevant
-##    gegenkat = sqrt(v(:,1) .* v(:,1)+v(:,2) .* v(:,2));
-##    alpha = atan(gegenkat ./ det1v(:,3));
-##    cosalpha = cos(alpha);
-##    p = [p(:,1) p(:,2)];
-##
-##    % create a raster/grid
-##    [r_edges, c_edges] = edges_from_nbins(det1p, [binx biny]);
-##    % sort the photons into the raster/grid
-##    r_idx = lookup (r_edges, p(:,1), "l");
-##    c_idx = lookup (c_edges, p(:,2), "l");
-##    % sum the calculated weights for each pixel
-##    for j = 1:length(r_idx)
-##        im(c_idx(j), r_idx(j)) +=  detw(j);% .* cosalpha(j);
-##    endfor
 end

@@ -1,19 +1,15 @@
 addpaths_turbo;
-
-filename = './data/down256.mhd';
-opts.nphoton = 1e7;
-img_filename = 'prop_mmc_780nm';
+tic;
+filename = '/home/probst/data/molar/Z_209_C0005777.raw rotated_256.mhd';
+opts.nphoton = 4e7;
+img_filename = 'prop_mmc_780nm_1e8';
 opts.prop = prop_mmc_780nm();
 
-%prop_mmc_632nm
-%prop_mmc_780nm
-%prop_mmc_700nm_kienle
-%prop_mmc_400nm_kienle
-
+% load the tooth
 [volume, unitinmm] = load_data(filename);
 [x,y,z] = size(volume);
-
-volume(volume == 0) = 1;
+volume = volume + 1;
+% remove all layers around the tooth which are only background
 arr = [];
 for xx = [1:x]
   arr = [arr ismember(0,(unique(volume(xx,:,:)) == 1))];
@@ -54,6 +50,7 @@ detdef =struct('srctype','planar',
       
 [node, elem, detdef, srcdef] = create_mesh(volume, srcdef, detdef, unitinmm);
 
+
  
 [fluence, detphoton, cfg] = mmc_sim(node, elem, detdef, srcdef, opts);
 
@@ -71,3 +68,4 @@ for d = [detdef]
     colorbar;
   end
 end
+toc

@@ -6,7 +6,7 @@ function [fluence, detphoton, cfg] = mmc_sim(node, elem, detdef, srcdef, opts)
       opts.nphoton = 1e7;
     end
     if (~isfield(opts,'maxdetphoton'))
-      opts.maxdetphoton = opts.nphoton / 5;
+      opts.maxdetphoton = opts.nphoton;
     end
     if (~isfield(opts,'prop'))
       opts.prop = prop_mcx_780nm();
@@ -75,6 +75,7 @@ function [fluence, detphoton, cfg] = mmc_sim(node, elem, detdef, srcdef, opts)
 
   %% Use this line to create a json config and many binary files to use mmc directly
   %mmc2json(cfg, 'mmc_cfg_octave')
+  
 
   %% run the simulation
   [fluence,detphoton,ncfg,seeds] = mmclab(cfg);

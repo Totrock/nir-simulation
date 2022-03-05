@@ -19,48 +19,34 @@ function [node, elem, detdef, srcdef] = create_mesh(volume, srcdef, detdef, unit
     opt.distbound=1;    % set max distance that deviates from the level-set
     opt.radbound=4;      % set surface triangle maximum size perv 4
 %    opt.radbound=1;      % set surface triangle maximum size
-%    opt.autoregion=0;     % don't save interior points
+    opt.autoregion=0;     % don't save interior points
     opt.A = diag([unitinmm,unitinmm,unitinmm]); % include voxel size in mm as scaling matrix
     opt.B = zeros(3,1); % no translation
 
   [node, elem, face] = v2m(volume, 1:max(volume(:)), opt, triangVolume, 'cgalmesh');
   
-%  [node,elem]=sortmesh([],node,elem,1:4); % Sort nodes and elements;
-%   elem=meshreorient(node,elem); % Re-orient elements;
-%  elem=meshreorient(node,elem);
+  node = node(:,1:3);
 
-%%  [node,elem,face]=vol2mesh(volume>0.05,1:size(volume,1),1:size(volume,2),1:size(volume,3),2,2,1);
-
-%% [node,elem,face]=vol2mesh(volume>0.05,1:size(volume,1),1:size(volume,2),1:size(volume,3),0.2,2,1,'simplify');
-
-  % the information in the 4th col of node is duplicated in elem 5th col (I think)
   
-%  node = node(:,1:3);
-
-%    tooth_mesh_figure = figure('name','basic mesh');
-%    mcxplotvol(volume);
-%    colorbar;
-    
+  % If you want to export the mesh data use the following line
   % save data.mat node elem x_mm y_mm z_mm;
   
-  %use this to view only dentin or pulp
-  % ausblendne von schmlez / dnetin
+  % view only dentin or pulp
   if DISPLAY_FIGURES > 1
-%    tooth_mesh_figure = figure('name','basic mesh1');
-%    plotmesh(node, elem(elem(:,5)>0,:));
-%    colorbar;
-%    colormap ('rainbow');
-%    
-%    tooth_mesh_figure = figure('name','basic mesh2');
-%    plotmesh(node(:,1:3), elem(elem(:,5)>1,:));
-%    colorbar;
-%    colormap ('rainbow');
-%   
-%    tooth_mesh_figure = figure('name','basic mesh3');
-%    plotmesh(node(:,1:3), elem(elem(:,5)>2,:));
-%    colorbar;
-%    colormap ('rainbow');
+    tooth_mesh_figure = figure('name','mesh of the tooth');
+    plotmesh(node, elem(elem(:,5)>0,:));
+    colorbar;
+    colormap ('rainbow');
     
+    tooth_mesh_figure = figure('name','mesh of tooth without enamel');
+    plotmesh(node(:,1:3), elem(elem(:,5)>1,:));
+    colorbar;
+    colormap ('rainbow');
+   
+    tooth_mesh_figure = figure('name','mesh of pulp');
+    plotmesh(node(:,1:3), elem(elem(:,5)>2,:));
+    colorbar;
+    colormap ('rainbow');
   endif
 
   

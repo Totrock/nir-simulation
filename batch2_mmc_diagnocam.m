@@ -1,11 +1,10 @@
-clear;
 addpaths_turbo;
 
 molar_dir = '/home/probst/data/molar/';
 files = dir(molar_dir);
-sim_times = 25;
+sim_times = 5;
 for file = files'
-    if regexp(file.name, '5777.raw rotated_256*.mhd') % 5769.raw rotated_256*.mhd')5767
+    if regexp(file.name, '5785.raw rotated_256*.mhd') % 5769.raw rotated_256*.mhd')5767
       filename = strcat(molar_dir, file.name);
       
       [volume, unitinmm] = load_data(filename);
@@ -71,6 +70,7 @@ for file = files'
         opts.isreflect = 1;
         [fluence, detphoton, cfg] = mmc_sim(node, elem, detdef, srcdef, opts);
         plotopts.resolution = [resZ resY];
+        plotopts.filterV = 1;
         im = mmc_plot_by_detector(detphoton, detdef.srcdir, plotopts);
         im = flip(im);
         log_img = log(im);
@@ -107,7 +107,7 @@ tooth_mesh_figure = figure('name',strcat('',file.name));
 
         opts.nphoton = 1e8;
         opts.isreflect = 1;
-        for x = [0:sim_times]
+        for x = [1:sim_times]
           [fluence, detphoton, cfg] = mmc_sim(node, elem, detdef, srcdef, opts);
           im2 = mmc_plot_by_detector(detphoton, detdef.srcdir, plotopts) ;
           im2 = rotdim(im2,3);

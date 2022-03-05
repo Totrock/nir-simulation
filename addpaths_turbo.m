@@ -24,7 +24,7 @@ addpath(genpath("./data"))
 % 1 -> display generated images
 % 2 -> also display meshes and preview
 global DISPLAY_FIGURES;
-DISPLAY_FIGURES = 2;
+DISPLAY_FIGURES = 1;
 
 
 % for mcxcl
