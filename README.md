@@ -4,9 +4,9 @@ Repository für die Simulation der Lichtausbreitung in Zähnen.
 Zähne werde durch segmentierte µCT-Scans abgebildet.
 Die Simulation wird mit MCX(LAB) und MMC(LAB) in Gnu Octave durchgeführt.
 
-Übersicht:
+## Übersicht:
 
-Ordner
+### Ordner
 - KHK
   - Dateien vom Projektinitiator
 - documentation
@@ -20,7 +20,9 @@ Ordner
   - Octave Skripte für die Simulation der einfachen Szenarien.
 -  utils
   - Einige Hilfsskripte (Eigenschaften der Zähne, angepasste version von mcx-svmc, Skripte zum Erstellen eines Bildes)
+### Python Skripte
 - add_pulp_segmentation.py
   - python skript, das die Pulpa segmentiert
 - downsample.py
   - python skript, welches das Volumen herunterskaliert
+### Octave/Matlab Skripte
