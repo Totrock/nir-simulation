@@ -26,3 +26,8 @@ Die Simulation wird mit MCX(LAB) und MMC(LAB) in Gnu Octave durchgeführt.
 - downsample.py
   - python skript, welches das Volumen herunterskaliert
 ### Octave/Matlab Skripte
+- addpaths_turbo.m
+  - fügt alle nötigen Pfade hinzu.
+  - die Pfade müssen bei einer anderen Installation angepasst werden
+- load_data.m
+  - lädt eine mhd Datei mit read3d
