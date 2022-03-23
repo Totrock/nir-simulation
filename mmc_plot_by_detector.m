@@ -55,6 +55,7 @@ function im = mmc_plot_by_detector(detphoton, detdir, opts)
     v_idx1 = abs(v(:,v_dir)) != 1;
     v = v(v_idx1,:);
     p = p(v_idx1,:);
+    detw = detw(v_idx1,:);
   end
   %%%%%%%%%%%%%%%%%%%%
   % kind of a pinhole lens / Collimator
@@ -63,16 +64,20 @@ function im = mmc_plot_by_detector(detphoton, detdir, opts)
     v_idx2 = abs(v(:,v_dir)) > 0.99;
     v = v(v_idx2,:);
     p = p(v_idx2,:);
+    detw = detw(v_idx2,:);
   end
   
   % create empty image
   im = zeros(biny, binx);
-  % sort the photons into a grid
+%   sort the photons into a grid
   [r_edges, c_edges] = edges_from_nbins(p, [binx biny]);
   r_idx = lookup (r_edges, p(:,1), "l");
   c_idx = lookup (c_edges, p(:,2), "l");
   for j = 1:length(r_idx)
       im(c_idx(j), r_idx(j)) += detw(j);
   endfor
+
+% hist3 needs the statistics package and can't account for the weight
+%  im = hist3(p, 'Nbins', [biny binx]);
 
 end

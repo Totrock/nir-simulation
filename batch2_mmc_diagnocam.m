@@ -1,11 +1,12 @@
 addpaths_turbo;
 
-molar_dir = '/home/probst/data/molar/';
-files = dir(molar_dir);
+%tooth_dir = '/home/probst/data/molar/';
+tooth_dir = '/home/probst/data/praemolar/';
+files = dir(tooth_dir);
 sim_times = 5;
 for file = files'
-    if regexp(file.name, '5785.raw rotated_256*.mhd') % 5769.raw rotated_256*.mhd')5767
-      filename = strcat(molar_dir, file.name);
+    if regexp(file.name, '5798.raw rotated_256*.mhd') % 5769.raw rotated_256*.mhd')5767
+      filename = strcat(tooth_dir, file.name);
       
       [volume, unitinmm] = load_data(filename);
       volume = rotdim (volume, 1, [1, 3]);
@@ -43,15 +44,6 @@ for file = files'
                     'srcdir',srcdir,
                     'srcparam1',srcparam1);  
                     
-                    
-%      srcdir = [1 0 0];
-%      srcdir = srcdir/norm(srcdir);
-%      srcpos = [-1 y_mm/2 z_mm/2];
-%      srcparam1 = [10];
-%      srcdef=struct('srctype','disk',
-%                    'srcpos',srcpos,
-%                    'srcdir',srcdir,
-%                    'srcparam1',srcparam1); 
 
       detpos = [x_mm+1 0.5 0.5];
       detdef =struct('srctype','planar',
@@ -65,22 +57,23 @@ for file = files'
         resZ = int16(z_mm*25);
         resY = int16(y_mm*25);
         im_total = zeros([resZ resY]);
-        for x = [1:sim_times]
-        opts.nphoton = 1e8;
-        opts.isreflect = 1;
-        [fluence, detphoton, cfg] = mmc_sim(node, elem, detdef, srcdef, opts);
-        plotopts.resolution = [resZ resY];
-        plotopts.filterV = 1;
-        im = mmc_plot_by_detector(detphoton, detdef.srcdir, plotopts);
-        im = flip(im);
-        log_img = log(im);
-        if DISPLAY_FIGURES
-          tooth_figure = figure('name',strcat('111mmc tooth reflect:', file.name));
-          imagesc(log_img);
-          colorbar;
+        for x = [5*pi/180 10*pi/180 15*pi/180 20*pi/180]
+          srcdef.srcparam1 = x;
+          opts.nphoton = 1e8;
+          opts.isreflect = 1;
+          [fluence, detphoton, cfg] = mmc_sim(node, elem, detdef, srcdef, opts);
+          plotopts.resolution = [resZ resY];
+          plotopts.filterV = 1;
+          im = mmc_plot_by_detector(detphoton, detdef.srcdir, plotopts);
+          im = flip(im);
+          log_img = log(im);
+          if DISPLAY_FIGURES
+            tooth_figure = figure('name',strcat('111mmc tooth reflect:', file.name));
+            imagesc(log_img);
+            colorbar;
+          end
+          im_total = im_total + im;
         end
-        im_total = im_total + im;
-      end
       
       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
       %
@@ -107,7 +100,8 @@ tooth_mesh_figure = figure('name',strcat('',file.name));
 
         opts.nphoton = 1e8;
         opts.isreflect = 1;
-        for x = [1:sim_times]
+        for x = [5*pi/180 10*pi/180 15*pi/180 20*pi/180]
+          srcdef.srcparam1 = x;
           [fluence, detphoton, cfg] = mmc_sim(node, elem, detdef, srcdef, opts);
           im2 = mmc_plot_by_detector(detphoton, detdef.srcdir, plotopts) ;
           im2 = rotdim(im2,3);

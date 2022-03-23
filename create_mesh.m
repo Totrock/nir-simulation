@@ -12,13 +12,11 @@ function [node, elem, detdef, srcdef] = create_mesh(volume, srcdef, detdef, unit
 
 %   maximum node volume. Increasing this value should
 %   create larger tetrahedra in the centre of an image region.
-%   triangVolume = 1000;
-   triangVolume = 100;
+   triangVolume = 100; % 10 - 1000
 
 %   option struct
-    opt.distbound=1;    % set max distance that deviates from the level-set
-    opt.radbound=4;      % set surface triangle maximum size perv 4
-%    opt.radbound=1;      % set surface triangle maximum size
+    opt.distbound=1;    % set max distance that deviates from the level-set, ~1 - 4
+    opt.radbound=4;      % set surface triangle maximum size perv, ~1 - 4
     opt.autoregion=0;     % don't save interior points
     opt.A = diag([unitinmm,unitinmm,unitinmm]); % include voxel size in mm as scaling matrix
     opt.B = zeros(3,1); % no translation
@@ -27,7 +25,6 @@ function [node, elem, detdef, srcdef] = create_mesh(volume, srcdef, detdef, unit
   
   node = node(:,1:3);
 
-  
   % If you want to export the mesh data use the following line
   % save data.mat node elem x_mm y_mm z_mm;
   
@@ -52,6 +49,11 @@ function [node, elem, detdef, srcdef] = create_mesh(volume, srcdef, detdef, unit
   
 
   [node,elem]=mmcaddsrc(node,elem,srcdef);
+  
+    tooth_mesh_figure = figure('name','mesh of the tooth');
+    plotmesh(node, elem(elem(:,5)~=0,:));
+    colorbar;
+    colormap ('rainbow');
 
   if DISPLAY_FIGURES > 1
     tooth_src = figure;

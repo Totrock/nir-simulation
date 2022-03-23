@@ -1,7 +1,7 @@
 addpaths_turbo;
 tic;
 filename = '/home/probst/data/molar/Z_209_C0005777.raw rotated_256.mhd';
-opts.nphoton = 4e7;
+opts.nphoton = 1e8;
 img_filename = 'prop_mmc_780nm_1e8';
 opts.prop = prop_mmc_780nm();
 
@@ -34,8 +34,8 @@ z_mm = unitinmm * z;
 
 srcdir = [-1 0 0];
 srcdir = srcdir/norm(srcdir);
-srcpos = [x_mm+2 y_mm/2+0.5 z_mm/2+0.5];
-srcparam1 = [7.5 0 0];
+srcpos = [x_mm+2 y_mm/2+0.5 z_mm/4*3+0.5];
+srcparam1 = [1 0 0];
 srcdef=struct('srctype','disk',
               'srcpos',srcpos,
               'srcdir',srcdir,
@@ -52,20 +52,27 @@ detdef =struct('srctype','planar',
 
 
  
-[fluence, detphoton, cfg] = mmc_sim(node, elem, detdef, srcdef, opts);
+[flux, detphoton, cfg] = mmc_sim(node, elem, detdef, srcdef, opts);
 
 for d = [detdef]
-  p1 = int16(sum(d.srcparam1)*25);
-  p2 = int16(sum(d.srcparam2)*25);
+  p1 = int16(sum(d.srcparam1)*20);
+  p2 = int16(sum(d.srcparam2)*20);
   plot_opt.resolution = [p1, p2];
+  plot_opt.filterV =0;
   im = mmc_plot_by_detector(detphoton, d.srcdir, plot_opt);
   im = im(1:p1-1, 1:p2-p2*0.05);
   create_png(im, img_filename);
-
   if DISPLAY_FIGURES
     tooth_figure = figure('name',strcat('mmc tooth reflect:', int2str(cfg.isreflect)));
     imagesc(log(im));
     colorbar;
   end
 end
+% show slices of the flux
+figure;
+qmeshcut(cfg.elem(cfg.elemprop>0,1:4),cfg.node*unitinmm,log(flux.data),'x=0.5','linestyle','none');
+figure;
+qmeshcut(cfg.elem(cfg.elemprop>0,1:4),cfg.node*unitinmm,log(flux.data),'y=0.5','linestyle','none');
+figure;
+qmeshcut(cfg.elem(cfg.elemprop>0,1:4),cfg.node*unitinmm,log(flux.data),'z=0.5','linestyle','none');
 toc

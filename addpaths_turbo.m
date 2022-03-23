@@ -26,6 +26,7 @@ addpath(genpath("./data"))
 global DISPLAY_FIGURES;
 DISPLAY_FIGURES = 1;
 
+% pkg load statistics;
 
 % for mcxcl
 % mcxlab(cfg,'opencl');

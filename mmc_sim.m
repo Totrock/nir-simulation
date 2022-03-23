@@ -1,4 +1,4 @@
-function [fluence, detphoton, cfg] = mmc_sim(node, elem, detdef, srcdef, opts)
+function [flux, detphoton, cfg] = mmc_sim(node, elem, detdef, srcdef, opts)
 
   % load defaults if needed
   if(isstruct(opts))
@@ -38,6 +38,7 @@ function [fluence, detphoton, cfg] = mmc_sim(node, elem, detdef, srcdef, opts)
   cfg.srcdir=srcdef.srcdir;
   cfg.srcparam1=srcdef.srcparam1;
 
+
   cfg.detpos=[detdef.srcpos 1];
 
   % the 5th col of elem contains information about which region the tetrahedron is assigned to 
@@ -50,7 +51,6 @@ function [fluence, detphoton, cfg] = mmc_sim(node, elem, detdef, srcdef, opts)
   %cfg.node=cfg.node(:,1:3);
 
   cfg.prop= opts.prop;
-
             
              
   cfg.tstart=0;
@@ -65,7 +65,7 @@ function [fluence, detphoton, cfg] = mmc_sim(node, elem, detdef, srcdef, opts)
     cfg.detparam2 = [0 sum(detdef.srcparam1) 0 400];
   end
   
-  cfg.outputtype = 'fluence';
+%  cfg.outputtype = 'fluence';
   
   cfg.isreflect = opts.isreflect;
   cfg.method='elem';
@@ -78,7 +78,7 @@ function [fluence, detphoton, cfg] = mmc_sim(node, elem, detdef, srcdef, opts)
   
 
   %% run the simulation
-  [fluence,detphoton,ncfg,seeds] = mmclab(cfg);
+  [flux,detphoton] = mmclab(cfg);
 
   %% save simulation to file
   ##save detected_photons.mat detphoton;

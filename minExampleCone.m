@@ -1,6 +1,6 @@
 addpaths_turbo
 % add needed paths
-config = 2;% 1 or 2 --- 1 does work 2 not
+config = 1;% 1 or 2 --- 1 does work 2 not
 
 [cfg.node,face,cfg.elem]=meshabox([3 3 3],[27 27 27],10,10);
 cfg.prop=[0 0 1 1;0.005 5.1 0.999 1.2];
@@ -20,7 +20,7 @@ if config == 2
 end
 srcdir = cfg.srcdir;
 srcpos = cfg.srcpos;
-srcparam1 = [0.5 0 0];
+srcparam1 = [0.20 0];
 srcdef=struct('srctype','cone',
               'srcpos',srcpos,
               'srcdir',srcdir,

@@ -5,7 +5,7 @@ svmc = false;
 opts.nphoton = 4e7;
 opts.prop = prop_mcx_780nm();
 
-filename = 'down256.mhd';
+filename = 'down512.mhd';
 
 [volume, unitinmm] = load_data(filename);
 volume(volume == 0) = 1;
