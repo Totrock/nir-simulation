@@ -1,4 +1,9 @@
 # NIR-simulation
 
-Repo for near infrared photon simulation in µCT-Scans of segmented teeth.
-With mcx(lab) and octave. 
+Repository für die Simulation der Lichtausbreitung in Zähnen.
+Zähne werde durch segmentierte µCT-Scans abgebildet.
+Die Simulation wird mit mcx(lab) und mmc(lab) in Gnu Octave durchgeführt.
+
+Übersicht:
+
+- 
