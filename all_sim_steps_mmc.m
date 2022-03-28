@@ -1,9 +1,15 @@
 addpaths_turbo;
-tic;
+%
+% a basic simulation with mmc
+% source and detector are on opposing sides
+%
 filename = '/home/probst/data/molar/Z_209_C0005777.raw rotated_256.mhd';
-opts.nphoton = 1e8;
+opts.nphoton = 1e7;
 img_filename = 'prop_mmc_780nm_1e8';
 opts.prop = prop_mmc_780nm();
+% radius of src in mm
+% e.g. switch between 1 and 8
+srcparam1 = [1 0 0];
 
 % load the tooth
 [volume, unitinmm] = load_data(filename);
@@ -35,7 +41,6 @@ z_mm = unitinmm * z;
 srcdir = [-1 0 0];
 srcdir = srcdir/norm(srcdir);
 srcpos = [x_mm+2 y_mm/2+0.5 z_mm/4*3+0.5];
-srcparam1 = [1 0 0];
 srcdef=struct('srctype','disk',
               'srcpos',srcpos,
               'srcdir',srcdir,
@@ -75,4 +80,3 @@ figure;
 qmeshcut(cfg.elem(cfg.elemprop>0,1:4),cfg.node*unitinmm,log(flux.data),'y=0.5','linestyle','none');
 figure;
 qmeshcut(cfg.elem(cfg.elemprop>0,1:4),cfg.node*unitinmm,log(flux.data),'z=0.5','linestyle','none');
-toc
