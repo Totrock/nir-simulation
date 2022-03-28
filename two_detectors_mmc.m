@@ -1,8 +1,9 @@
 addpaths_turbo;
 
+% example for a failure which can occur when placeing the detectors
+
 filename = './data/down256.mhd';
 opts.nphoton = 1e6;
-
 [volume, unitinmm] = load_data(filename);
 [x,y,z] = size(volume);
 
@@ -38,6 +39,7 @@ srcdef=struct('srctype','disk',
               'srcdir',srcdir,
               'srcparam1',srcparam1);  
 
+              
 detsize = max(z_mm, y_mm);
 detpos = [-1 y_mm/2-detsize/2 z_mm/2-detsize/2];
 detdef =struct('srctype','planar',
@@ -45,43 +47,22 @@ detdef =struct('srctype','planar',
               'srcdir',[1 0 0],
               'srcparam1',[0 detsize 0],
               'srcparam2',[0 0 detsize]);
-% mit  +1 broken
+
+% adding 1 to the size of this detector will result in 5 triangles as detectors
+% we would expect 4 triangles for the 2 planar detectors
 detsize2 = max(x_mm, y_mm);
+%detsize2 = max(x_mm, y_mm) + 1;
 detpos2 = [x_mm/2-detsize2/2 y_mm/2-detsize2/2 -1];
 detdef2 =struct('srctype','planar',
             'srcpos',detpos2,
             'srcdir',[0 0 1],
             'srcparam1',[detsize2 0 0],
             'srcparam2',[0 detsize2 0]);
-
-%detsize = 9;
-%detpos = [x_mm y_mm/2-detsize/2 z_mm*0.7-detsize/2];
-%detdef =struct('srctype','planar',
-%            'srcpos',detpos,
-%            'srcdir',[1 0 0],
-%            'srcparam1',[0 detsize 0],
-%            'srcparam2',[0 0 detsize]);
               
-[node, elem, detdef2, srcdef] = create_mesh(volume, srcdef, detdef2, unitinmm, detdef);
+[node, elem, detdef2, srcdef] = create_mesh(volume, srcdef, detdef, unitinmm, detdef2);
 
 figure();
 plotmesh(node, elem(elem(:,5)~=0,:));
 
- 
-opts.isreflect = 1
-[fluence, detphoton, cfg] = mmc_sim(node, elem, detdef, srcdef, opts, detdef2);
-
-for d = [detdef detdef2]
-  plot_opt.resolution = [200, 200];
-  im = mmc_plot_by_detector(detphoton, d.srcdir, plot_opt);
-
-  im2 = im(int16(plot_opt.resolution(1)*0.195):int16(plot_opt.resolution(1)*0.94),int16(plot_opt.resolution(2)*0.11):int16(plot_opt.resolution(2)*0.89));
-
-  create_png(im2, 'mmc');
-
-  if DISPLAY_FIGURES
-    tooth_figure = figure('name',strcat('mmc tooth reflect:', int2str(cfg.isreflect)));
-    imagesc(log(im(2:199,2:199)));
-    colorbar;
-  end
-end
+figure();
+plotmesh(node, elem);

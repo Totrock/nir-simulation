@@ -106,8 +106,6 @@ for file = files'
     tooth_figure = figure('name',strcat('333mmcIMG tooth reflect:', file.name));
     imagesc(log(im_total));
     colorbar;
-    colorbar;
-
   end
 
 end
