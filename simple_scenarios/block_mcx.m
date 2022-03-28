@@ -21,18 +21,11 @@ volume(x-64:x, :, :) = 1;
 %prepare parameters
 mcx_input.prop = [0 0 1 1;      % 0-Voxel Detector / Border of Simulation
            0 0 1 1;             % 1-Voxel Air
-           0.04 0.5 0.9 1.633;  % 2-Voxel Enamel (Top-Right in Image)
-           0.04 0.5 0.9 1.633;  % 3-Voxel Enamel (Bottom-Right in Image)
-           0.15 6.8 0.964 1.54; % 4-Voxel Dentin (Bottom-Left in Image)
-           2.8 2.75 0.77 1.39]; % 5-Voxel Pulp (Top-Left in Image)
+           0.1 2.867 0.99 1.63;  % 2-Voxel Enamel (Top-Right in Image)
+           0.1 2.867 0.99 1.63;  % 3-Voxel Enamel (Bottom-Right in Image)
+           0.35 22.193 0.83 1.49; % 4-Voxel Dentin (Bottom-Left in Image)
+           0.0025 1.5 0.77 1.39]; % 5-Voxel Pulp (Top-Left in Image)
            
-% old properties
-%mcx_input.prop = [0 0 1 1;
-%                  0 0 1 1;
-%                  0.1 2.867 0.99 1.63;
-%                  0.1 2.867 0.99 1.63;
-%                  0.35 22.193 0.83 1.49;   
-%                  2.8 0 1 1.333]; 
            
 % set up src and detector            
 srcdef.srctype = 'disk';

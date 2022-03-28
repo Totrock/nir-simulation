@@ -5,7 +5,7 @@ tooth_dir = '/home/probst/data/praemolar/';
 files = dir(tooth_dir);
 sim_times = 5;
 for file = files'
-    if regexp(file.name, '5798.raw rotated_256*.mhd') % 5769.raw rotated_256*.mhd')5767
+    if regexp(file.name, '5806.raw rotated_256*.mhd') % 5769.raw rotated_256*.mhd')5767
       filename = strcat(tooth_dir, file.name);
       
       [volume, unitinmm] = load_data(filename);
