@@ -3,8 +3,9 @@ addpaths_turbo;
 
 molar_dir = '/home/probst/data/praemolar/';
 files = dir(molar_dir);
-sim_times_3 = 1;
+sim_times = 3;
 radius = 8;
+nphoton = 1e7;
 for file = files'
     if regexp(file.name, '5776.raw rotated_256*.mhd') %|| regexp(file.name, '5769.raw rotated_256*.mhd')|| regexp(file.name, '5776.raw rotated_256*.mhd')|| regexp(file.name, '5784.raw rotated_256*.mhd')
       filename = strcat(molar_dir, file.name);
@@ -30,7 +31,8 @@ for file = files'
         arr = [arr ismember(0,(unique(volume(:,:,zz)) == 1))];
       end
       volume = volume(:,:,logical(arr));
-      %mcxplotvol (volume)
+      figure();
+      mcxplotvol(volume);
       [x,y,z] = size(volume);
 
       x_mm = unitinmm * x;
@@ -64,7 +66,7 @@ for file = files'
           colorbar;
         endif
         
-        opts.nphoton = 1e8;
+        opts.nphoton = nphoton;
         opts.issaveexit = 1;
         opts.isreflect = 1;
         resZ = int16(z_mm*25);
@@ -73,95 +75,19 @@ for file = files'
         img = rotdim(img,3);
         plotopts.resolution = [resZ resY];
 
-        for i = [1:sim_times_3]
+        for i = [1:sim_times]
           [fluence, detphoton, cfg] = mmc_sim(node, elem, detdef, srcdef, opts);
          im = mmc_plot_by_detector(detphoton, detdef.srcdir,plotopts);
           im = rotdim(im,3);
           img = img + im;
           
         endfor
-        
-%        %%2
-%        srcdir = [7 -5 10];
-%      srcdir = srcdir/norm(srcdir);
-%      srcpos = [x_mm/2-3 y_mm/2+3 -2];
-%      srcparam1 = [radius];
-%      srcdef=struct('srctype','disk',
-%                    'srcpos',srcpos,
-%                    'srcdir',srcdir,
-%                    'srcparam1',srcparam1);  
-%
-%      detsize = max(x_mm, y_mm);
-%      detpos = [0.5 0.5 z_mm+0.5];
-%      detdef =struct('srctype','planar',
-%                  'srcpos',detpos,
-%                  'srcdir',[0 0 -1],
-%                  'srcparam1',[detsize 0 0],
-%                  'srcparam2',[0 detsize 0]);
-%      
-%      
-%        [node, elem, detdef, srcdef] = create_mesh(volume, srcdef, detdef, unitinmm);
-%        if DISPLAY_FIGURES > 1
-%          figure();
-%          plotmesh(node, elem(elem(:,5)~=0,:));
-%          colorbar;
-%        endif
-%        
-%
-%        for i = [1:sim_times_3]
-%          [fluence, detphoton, cfg] = mmc_sim(node, elem, detdef, srcdef, opts);
-%        
-%         im = mmc_plot_by_detector(detphoton, detdef.srcdir,plotopts);
-%          im = rotdim(im,3);
-%          img = img + im;
-%          
-%        endfor
-%        
-%        %%3
-%        srcdir = [7 5 10];
-%      srcdir = srcdir/norm(srcdir);
-%      srcpos = [x_mm/2-3 y_mm/2-3 -2];
-%      srcparam1 = [radius];
-%      srcdef=struct('srctype','disk',
-%                    'srcpos',srcpos,
-%                    'srcdir',srcdir,
-%                    'srcparam1',srcparam1);  
-%
-%      detsize = max(x_mm, y_mm);
-%      detpos = [0.5 0.5 z_mm+0.5];
-%      detdef =struct('srctype','planar',
-%                  'srcpos',detpos,
-%                  'srcdir',[0 0 -1],
-%                  'srcparam1',[detsize 0 0],
-%                  'srcparam2',[0 detsize 0]);
-%      
-%      
-%        [node, elem, detdef, srcdef] = create_mesh(volume, srcdef, detdef, unitinmm);
-%        if DISPLAY_FIGURES > 1
-%          figure();
-%          plotmesh(node, elem(elem(:,5)~=0,:));
-%          colorbar;
-%        endif
-%
-%        for i = [1:sim_times_3]
-%          [fluence, detphoton, cfg] = mmc_sim(node, elem, detdef, srcdef, opts);
-%          im = mmc_plot_by_detector(detphoton, detdef.srcdir,plotopts);
-%          im = rotdim(im,3);
-%          img = img + im;
-%          
-%        endfor
-        
-        %%
 
-        im = img;
+        im = img(2:resY-1,2:resZ-1);
 
         create_png(im, strcat(file.name, '-180'));
-%        if DISPLAY_FIGURES
           tooth_figure = figure('name',strcat('mmc tooth reflect:', file.name));
           imagesc(log(im));
           colorbar;
-%        end
       end
-
-
 end

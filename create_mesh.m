@@ -12,11 +12,11 @@ function [node, elem, detdef, srcdef] = create_mesh(volume, srcdef, detdef, unit
 
 %   maximum node volume. Increasing this value should
 %   create larger tetrahedra in the centre of an image region.
-   triangVolume = 100; % 10 - 1000
+   triangVolume = 10; % 10 - 1000
 
 %   option struct
     opt.distbound=1;    % set max distance that deviates from the level-set, ~1 - 4
-    opt.radbound=4;      % set surface triangle maximum size perv, ~1 - 4
+    opt.radbound=1;      % set surface triangle maximum size perv, ~1 - 4
     opt.autoregion=0;     % don't save interior points
     opt.A = diag([unitinmm,unitinmm,unitinmm]); % include voxel size in mm as scaling matrix
     opt.B = zeros(3,1); % no translation

@@ -5,7 +5,9 @@ addpaths_turbo;
 molar_dir = '/home/probst/data/praemolar/';
 files = dir(molar_dir);
 for file = files'
-    if regexp(file.name, '5776.raw rotated_256*.mhd')
+  % if "5776" is removed from the next line the script will go through all
+  % mhd files which have been rotated and a resoltion of 256
+    if regexp(file.name, '5776.raw rotated_256*.mhd') 
       filename = strcat(molar_dir, file.name);
       
       [volume, unitinmm] = load_data(filename);
@@ -32,10 +34,8 @@ for file = files'
       [node, elem, face] = v2m(volume, 1:max(volume(:)), opt, triangVolume, 'cgalmesh');
 
       tooth_mesh_figure = figure('name',strcat('',file.name),'position',[100,100,1200,1000]);
-              colormap ('rainbow');
-              colorbar();
+      colormap ('rainbow');
+      colorbar();
       plotmesh(node, elem);
-
   end
-
 end
