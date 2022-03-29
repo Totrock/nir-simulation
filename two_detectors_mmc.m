@@ -1,6 +1,10 @@
 addpaths_turbo;
+% it is possible to place multiple detectors in mmc
+% but adding a second detector can result in errors
+% therefore i would not recommend using two detectors
+% just let the simulation run twice (at least for the development phase)
 
-% example for a failure which can occur when placeing the detectors
+% an example for a failure which can occur when placeing a second detector
 
 filename = './data/down256.mhd';
 opts.nphoton = 1e6;

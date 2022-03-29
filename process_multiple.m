@@ -1,6 +1,6 @@
 addpaths_turbo;
 
-% just a very short demo code:
+% just a very short demo code for
 % how to iterate over all files in a directory
 
 %tooth_dir = '/home/probst/data/praemolar/';
