@@ -10,36 +10,42 @@ function [node, elem, detdef, srcdef] = create_mesh(volume, srcdef, detdef, unit
   volume(volume == 0) = 1;
   volume = volume - 1;
 
-%   maximum node volume. Increasing this value should
-%   create larger tetrahedra in the centre of an image region.
-   triangVolume = 10; % 10 - 1000
-
-%   option struct
-    opt.distbound=1;    % set max distance that deviates from the level-set, ~1 - 4
-    opt.radbound=1;      % set surface triangle maximum size perv, ~1 - 4
-    opt.autoregion=0;     % don't save interior points
-    opt.A = diag([unitinmm,unitinmm,unitinmm]); % include voxel size in mm as scaling matrix
-    opt.B = zeros(3,1); % no translation
-
-  [node, elem, face] = v2m(volume, 1:max(volume(:)), opt, triangVolume, 'cgalmesh');
   
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% configure the folloing parameters to alter the mesh generation
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % maximum node volume. Increasing this value should
+  % create larger tetrahedra in the centre of an image region.
+  triangVolume = 10; % I used  [10 - 1000]
+
+  opt.distbound=1;    % set max distance that deviates from the level-set, I used [1 - 4]
+  opt.radbound=1;     % set surface triangle maximum size perv, I used [1 - 4]
+  opt.autoregion=0;   % don't save interior points
+  opt.A = diag([unitinmm,unitinmm,unitinmm]); % include voxel size in mm as scaling matrix
+  opt.B = zeros(3,1); % no translation
+  
+  % create a mesh from the volume
+  [node, elem, face] = v2m(volume, 1:max(volume(:)), opt, triangVolume, 'cgalmesh');
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+  % cut off redundant information
   node = node(:,1:3);
 
   % If you want to export the mesh data use the following line
   % save data.mat node elem x_mm y_mm z_mm;
   
-  % view only dentin or pulp
   if DISPLAY_FIGURES > 1
+    % display the tooth without the convex hull
     tooth_mesh_figure = figure('name','mesh of the tooth');
     plotmesh(node, elem(elem(:,5)>0,:));
     colorbar;
     colormap ('rainbow');
-    
+    % display only dentin and pulp
     tooth_mesh_figure = figure('name','mesh of tooth without enamel');
     plotmesh(node(:,1:3), elem(elem(:,5)>1,:));
     colorbar;
     colormap ('rainbow');
-   
+    % display only the pulp
     tooth_mesh_figure = figure('name','mesh of pulp');
     plotmesh(node(:,1:3), elem(elem(:,5)>2,:));
     colorbar;
@@ -47,35 +53,33 @@ function [node, elem, detdef, srcdef] = create_mesh(volume, srcdef, detdef, unit
   endif
 
   
-
+  % add a source
   [node,elem]=mmcaddsrc(node,elem,srcdef);
-  
+  % display the tooth without the convex hull but with tetrahedron of the source
+  if DISPLAY_FIGURES > 1
     tooth_mesh_figure = figure('name','mesh of the tooth');
     plotmesh(node, elem(elem(:,5)~=0,:));
     colorbar;
     colormap ('rainbow');
-
+  end
+  % display the complete current mesh
   if DISPLAY_FIGURES > 1
     tooth_src = figure;
     plotmesh(node, elem);
     colorbar;
-  endif
+  end
   
-  % srcdir is irrelevant for the detector, but must be defined nevertheless
-  % planar will create a rectangle defined by 4 corners srcpos, srcpos+srcparam1, srcpos+srcparam2, srcpos+srcparam1+srcparam2
-  % it has to be called src...
-    
+  % add a detector
   [node,elem]=mmcadddet(node,elem,detdef);
-
   if DISPLAY_FIGURES > 1
     tooth_det = figure;
     plotmesh(node, elem);
     colorbar;
   end
   
+  % add second detector if it was given as a parameter
   if nargin > 4
     [node,elem]=mmcadddet(node,elem,detdef2);
-
     if DISPLAY_FIGURES > 1
       tooth_det = figure;
       plotmesh(node, elem);
@@ -84,5 +88,5 @@ function [node, elem, detdef, srcdef] = create_mesh(volume, srcdef, detdef, unit
   end
 
   % the created mesh is now in mm
-  % so basically this is true: unitinmm = 1;
+  % so unitinmm is equal to 1
 end

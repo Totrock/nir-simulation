@@ -22,9 +22,13 @@ srcdef=struct('srctype','disk',
               'srcpos',srcpos,
               'srcdir',srcdir,
               'srcparam1',srcparam1); 
-             
+         
+         
 detsize = x_mm_block/2;
 detpos = [5 y_mm_block/4+0.5 z_mm_block/4+0.5];
+% srcdir is irrelevant for the detector, but must be defined nevertheless
+% planar will create a rectangle defined by 4 corners; srcpos, srcpos+srcparam1, srcpos+srcparam2, srcpos+srcparam1+srcparam2
+% the fieldnames of the struct have to begin with src... not det...
 detdef =struct('srctype','planar',
               'srcpos',detpos,
               'srcdir',[1 0 0],
