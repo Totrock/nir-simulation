@@ -2,13 +2,13 @@ addpaths_turbo;
 %
 % this script will open a figure with the mesh of the tooth
 %
-molar_dir = '/home/probst/data/praemolar/';
-files = dir(molar_dir);
+tooth_dir = '/home/probst/data/praemolar/';
+files = dir(tooth_dir);
 for file = files'
   % if "5776" is removed from the next line the script will go through all
   % mhd files which have been rotated and a resoltion of 256
     if regexp(file.name, '5776.raw rotated_256*.mhd') 
-      filename = strcat(molar_dir, file.name);
+      filename = strcat(tooth_dir, file.name);
       
       [volume, unitinmm] = load_data(filename);
       volume = rotdim (volume, 1, [1, 3]);
@@ -24,6 +24,7 @@ for file = files'
 
       volume(volume == 0) = 1;
       volume = volume - 1;
+      % change these parameters for different accuracy
       triangVolume = 100;
       opt.distbound=2;
       opt.radbound=2;  

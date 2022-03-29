@@ -4,7 +4,7 @@ function [flux, detphoton, cfg] = mmc_sim(node, elem, detdef, srcdef, opts)
 % and extract necessary data from the given parameters
 
 
-  % load defaults if needed
+  % this block will load defaults if the are not defined in opts
   if(isstruct(opts))
     if (~isfield(opts,'nphoton'))
       opts.nphoton = 1e7;
@@ -23,12 +23,15 @@ function [flux, detphoton, cfg] = mmc_sim(node, elem, detdef, srcdef, opts)
     end
   end
   
-  % configure the GPU ID!
-  % one could use this ratio, but the speedup is not really worth it
-%  cfg.gpuid='11';
-%  cfg.workload = [14,1];
+  % Maybe you have to configure the GPU ID on your system
+  % the ratio of the workload-split can be set in cfg.workload
+  % cfg.gpuid='11';
+  % cfg.workload = [14,1];
 
-  cfg.nphoton=opts.nphoton;
+  % number of simulated photons
+  cfg.nphoton = opts.nphoton;
+  
+  % defines how many photons should be recorded by the detector
   % could be set lower in many scenarios
   % depends on number, dimensions and positioning of detectors 
   cfg.maxdetphoton = opts.maxdetphoton;
@@ -53,11 +56,16 @@ function [flux, detphoton, cfg] = mmc_sim(node, elem, detdef, srcdef, opts)
 
   cfg.prop= opts.prop;
 
+  % 1e-5 seconds is plenty of time for our scenario
   cfg.tstart=0;
   cfg.tend=1e-5;
   cfg.tstep=1e-5;
-  cfg.issaveref=1;  % save surface diffuse reflectance
-  cfg.issaveexit = opts.issaveexit; % save photons which hit a detector (detphoton)
+  
+  % save surface diffuse reflectance
+  cfg.issaveref=1;  
+  
+  % save photons which hit a detector
+  cfg.issaveexit = opts.issaveexit; 
   
   % this will activate the widefield detector of mmc
   % I did not implement dynamically sized detectors for this

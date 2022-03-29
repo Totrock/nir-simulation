@@ -1,7 +1,9 @@
 function im = mmc_plot_by_detector(detphoton, detdir, opts)
-  
-  % number of arguments passed to the script
-  % fill in defaults...
+% this script will generate an image from the detected photons
+
+
+  % a block to fill in default values
+  % 'nargin' = number of arguments passed to the script
   if nargin == 2
     opts.resolution = [250, 250];
     opts.unitinmm = 1;
@@ -21,7 +23,7 @@ function im = mmc_plot_by_detector(detphoton, detdir, opts)
   biny = opts.resolution(1);
   binx = opts.resolution(2);
 
-  %% extract detphoton
+  % extract detphoton
   if(isfield(detphoton,'p'))
     p = detphoton.p;
   end
@@ -36,6 +38,8 @@ function im = mmc_plot_by_detector(detphoton, detdir, opts)
   detw=mmcdetweight(detphoton, prop, opts.unitinmm);
   
   % find out in which plane the detector is
+  % and reduce the information about where the photon hit the detector
+  % from 3D to 2D i.e. (xyz to xy/yz/xz)
   if detdir(1) == 1  
     p = [p(:,2) p(:,3)];
     v_dir = 1;
@@ -49,7 +53,6 @@ function im = mmc_plot_by_detector(detphoton, detdir, opts)
 
   %%%%%%%%%%%%%%%%%%%%
   % ignore all photons that hit the detector in a 90° angle
-  % almost all images were created without this
   %%%%%%%%%%%%%%%%%%%%
   if opts.filterV
     v_idx1 = abs(v(:,v_dir)) != 1;
@@ -58,7 +61,8 @@ function im = mmc_plot_by_detector(detphoton, detdir, opts)
     detw = detw(v_idx1,:);
   end
   %%%%%%%%%%%%%%%%%%%%
-  % kind of a pinhole lens / Collimator
+  % kind of a Collimator
+  % filters out all photons which do not hit the detector almost orthogonally
   %%%%%%%%%%%%%%%%%%%%
   if opts.filterV
     v_idx2 = abs(v(:,v_dir)) > 0.99;
@@ -69,7 +73,7 @@ function im = mmc_plot_by_detector(detphoton, detdir, opts)
   
   % create empty image
   im = zeros(biny, binx);
-%   sort the photons into a grid
+  % sort the photons into a grid and add the weights to each bin
   [r_edges, c_edges] = edges_from_nbins(p, [binx biny]);
   r_idx = lookup (r_edges, p(:,1), "l");
   c_idx = lookup (c_edges, p(:,2), "l");
@@ -77,7 +81,6 @@ function im = mmc_plot_by_detector(detphoton, detdir, opts)
       im(c_idx(j), r_idx(j)) += detw(j);
   endfor
 
-% hist3 needs the statistics package and can't account for the weight
-%  im = hist3(p, 'Nbins', [biny binx]);
-
+% hist3 needs the statistics package and can't account for the weight (but is much faster)
+% im = hist3(p, 'Nbins', [biny binx]);
 end
