@@ -4,7 +4,15 @@ Repository für die Simulation der Lichtausbreitung in Zähnen.
 Zähne werde durch segmentierte µCT-Scans abgebildet.
 Die Simulation wird mit MCX(LAB) und MMC(LAB) in Gnu Octave durchgeführt.
 
-## Übersicht:
+Ein einfaches Beispiel für eine Simulation mit MCX ist in simple_scenarios/block_mcx.m zu sehen.
+Dieses Beispiel ist gut kommentiert und kann direkt ausgeführt werden nachdem:
+- mcx installiert wurde
+- die korrekten pfade in addpaths_turbo eingetragen wurden
+- die zip in /data entpackt wurde
+
+Das Skript mmc_all_in_one_180.m kombiniert alle nötigen Befehle für eine Simulation mit MMC. Am Anfang des Skriptes sind weitere Anweisungen.
+
+## Übersicht über alle Dateien:
 
 ### Ordner
 - KHK
