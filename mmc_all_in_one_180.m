@@ -4,33 +4,36 @@
 %%%
 clear all;
 
-% first run a simulation without the kollimator and a large source
+% IMPORTANT IMPORTANT IMPORTANT IMPORTANT IMPORTANT
+% FIRST configure a path to a segmented tooth here:
+filename = '/home/probst/data/molar/Z_209_C0005777.raw rotated_256.mhd';
+% AND copy the correct paths for iso2mesh and mmc here:
+addpath(genpath('../bin/iso2mesh/'));
+addpath(genpath('../bin/mcx/mmc'));
+
+% now you can run a simulation without the kollimator and a large source
 % and afterwards one with the kollimator and a small source
 
+config = 2;
 
-kollimator = false;
-kollimator_threshold = 0.98
-number_of_photons = 1e7;
-radius_of_source_disk = 9; %mm
-
-% just delete the % to configure the second simulation
-
-kollimator = true;
-kollimator_threshold = 0.98
-number_of_photons = 1e8;
-radius_of_source_disk = 1; %mm
-
+if config == 1
+  kollimator = false;
+  kollimator_threshold = 0.98
+  number_of_photons = 1e7;
+  radius_of_source_disk = 9; %mm
+end
+if config == 2
+  kollimator = true;
+  kollimator_threshold = 0.98
+  number_of_photons = 1e8;
+  radius_of_source_disk = 1; %mm
+end
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % add paths
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
-% adds files in these directories to the search path of octave
-% genpath means all subdirectories
-addpath(genpath('../bin/iso2mesh/'));
-addpath(genpath('../bin/mcx/mmc'));
 % on a server with x2go we have to use another toolkit
 graphics_toolkit("fltk");
 % the package used for reading mhd/mha files
@@ -41,8 +44,6 @@ addpath(genpath("./utils/"))
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % load file
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-filename = '/home/probst/data/molar/Z_209_C0005777.raw rotated_256.mhd';
 
 volume = mha_read_volume(filename);
 volume = cast(volume,'uint8');
