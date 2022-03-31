@@ -5,9 +5,6 @@ addpaths_turbo;
 % the cube in the middle is 128**3
 filename = 'block.mhd';
 [volume, unitinmm] = load_data(filename);
-% currently the background is 0 and enamel is 1...
-% add one to every voxel becaue create_mesh will subtract 1
-volume = volume + 1;
 
 % prepare src and det for mesh
 x_mm_block = 20.480;

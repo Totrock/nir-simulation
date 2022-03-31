@@ -7,7 +7,6 @@ addpaths_turbo;
 % an example for a failure which can occur when placeing a second detector
 
 filename = './data/down256.mhd';
-opts.nphoton = 1e6;
 [volume, unitinmm] = load_data(filename);
 [x,y,z] = size(volume);
 
@@ -56,6 +55,8 @@ detdef =struct('srctype','planar',
 % we would expect 4 triangles for the 2 planar detectors
 detsize2 = max(x_mm, y_mm);
 %detsize2 = max(x_mm, y_mm) + 1;
+
+
 detpos2 = [x_mm/2-detsize2/2 y_mm/2-detsize2/2 -1];
 detdef2 =struct('srctype','planar',
             'srcpos',detpos2,

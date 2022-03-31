@@ -1,25 +1,22 @@
 function [node, elem, detdef, srcdef] = create_mesh(volume, srcdef, detdef, unitinmm, detdef2)
   global DISPLAY_FIGURES;
 
+  % determine the size of the volume in each direction (voxel)
   [x,y,z] = size(volume);
+  % calculate the size in millimeter
   x_mm = unitinmm * x;
   y_mm = unitinmm * y;
   z_mm = unitinmm * z;
-
-  % prepare the volume, so that it is completly enclosed in 0s
-  volume(volume == 0) = 1;
-  volume = volume - 1;
-
-  
+ 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% configure the folloing parameters to alter the mesh generation
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   % maximum node volume. Increasing this value should
   % create larger tetrahedra in the centre of an image region.
-  triangVolume = 10; % I used  [10 - 1000]
+  triangVolume = 200; % I used  [10 - 1000]
 
-  opt.distbound=1;    % set max distance that deviates from the level-set, I used [1 - 4]
-  opt.radbound=1;     % set surface triangle maximum size perv, I used [1 - 4]
+  opt.distbound=2.5;    % set max distance that deviates from the level-set, I used [1 - 4]
+  opt.radbound=2.5;     % set surface triangle maximum size perv, I used [1 - 4]
   opt.autoregion=0;   % don't save interior points
   opt.A = diag([unitinmm,unitinmm,unitinmm]); % include voxel size in mm as scaling matrix
   opt.B = zeros(3,1); % no translation

@@ -3,7 +3,6 @@ addpaths_turbo;
 [volume, unitinmm] = load_data('cylinder.mhd');
 volume = rotdim (volume, 1, [1, 3]);
 
-
 [x,y,z] = size(volume);
 x_mm = unitinmm * x;
 y_mm = unitinmm * y;
@@ -36,7 +35,7 @@ opt.B = zeros(3,1); % no translation
 tooth = figure('name','cylinder');
 plotmesh(node, elem);
 colorbar;
-        colormap ('prism');
+colormap ('prism');
 
 node = node(:,1:3);
 [node,elem]=mmcaddsrc(node,elem,srcdef);
@@ -75,13 +74,10 @@ cfg.detparam2 = [0 detsize 0];
 cfg.issaveexit = 1; 
 cfg.issaveref = 1; 
         
-for isreflect = [1:1] 
+for isreflect = [0:1] 
     cfg.isreflect = isreflect;
     [fluence, detphoton, cfg] = mmclab(cfg);
-     im = mmc_plot_by_detector(detphoton, detdef.srcdir) ;
-
-%    size(detphoton.p)
-%    im = log(sum(detphoton.data,3)');
+    im = mmc_plot_by_detector(detphoton, detdef.srcdir) ;
     tooth_figure = figure('name',strcat('MMC cylinder reflect:', int2str(cfg.isreflect)));
     imagesc(log(im));
     create_png(im, strcat('cylinder-mmc-1e8-250-reflect', int2str(isreflect)))

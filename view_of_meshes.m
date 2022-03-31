@@ -14,7 +14,6 @@ for file = files'
       volume = rotdim (volume, 1, [1, 3]);
       volume = rotdim (volume, 1, [2, 3]);
       volume = rotdim (volume, 3, [1, 2]);
-      volume = volume + 1;
 
       [x,y,z] = size(volume);
 
@@ -22,8 +21,6 @@ for file = files'
       y_mm = unitinmm * y;
       z_mm = unitinmm * z;
 
-      volume(volume == 0) = 1;
-      volume = volume - 1;
       % change these parameters for different accuracy
       triangVolume = 100;
       opt.distbound=2;
