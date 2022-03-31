@@ -11,6 +11,7 @@ Dieses Beispiel ist gut kommentiert und kann direkt ausgeführt werden nachdem:
 - die zip in /data entpackt wurde
 
 Das Skript mmc_all_in_one_180.m kombiniert alle nötigen Befehle für eine Simulation mit MMC. Am Anfang des Skriptes sind weitere Anweisungen.
+Die anderen Skripte sind modularer aufgebaut und benutzen andere Skripte.
 
 ## Übersicht über alle Dateien:
 
@@ -55,3 +56,4 @@ Das Skript mmc_all_in_one_180.m kombiniert alle nötigen Befehle für eine Simul
 - two_detectors_mmc.m
   - Beispiel wie das Hinzufügen von zwei Detektoren fehlschlagen kann
 
+Die Skripte aus simple_scenarios und mcx_180.m, mmc_180.m, mmc_90_cone.m und mmc_90_disk.m stellen jeweils eine komplett konfigurierte Simulation dar. Oft sind am Anfang des Skriptes relevante Parameter angegeben die noch variiert werden können. Der Dateiname gibt jeweils Aufschluss über das simulierte Szenario.
