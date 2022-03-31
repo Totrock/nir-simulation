@@ -26,7 +26,7 @@ for zz = [1:z]
   arr = [arr ismember(0,(unique(volume(:,:,zz)) == 1))];
 end
 volume = volume(:,:,logical(arr));
-
+volume = volume - 1;
 [x,y,z] = size(volume);
 
 x_mm = unitinmm * x;
@@ -53,8 +53,8 @@ detdef =struct('srctype','planar',
 
 % adding 1 to the size of this detector will result in 5 triangles as detectors
 % we would expect 4 triangles for the 2 planar detectors
-detsize2 = max(x_mm, y_mm);
-%detsize2 = max(x_mm, y_mm) + 1;
+%detsize2 = max(x_mm, y_mm);
+detsize2 = max(x_mm, y_mm) + 1;
 
 
 detpos2 = [x_mm/2-detsize2/2 y_mm/2-detsize2/2 -1];

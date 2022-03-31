@@ -15,21 +15,21 @@ radius = 8
 % load the tooth
 [volume, unitinmm] = load_data(filename);
 [x,y,z] = size(volume);
-volume = volume + 1;
+
 % remove all layers around the tooth which are only background
 arr = [];
 for xx = [1:x]
-  arr = [arr ismember(0,(unique(volume(xx,:,:)) == 1))];
+  arr = [arr ismember(0,(unique(volume(xx,:,:)) == 0))];
 end
 volume = volume(logical(arr),:,:);
 arr = [];
 for yy = [1:y]
-  arr = [arr ismember(0,(unique(volume(:,yy,:)) == 1))];
+  arr = [arr ismember(0,(unique(volume(:,yy,:)) == 0))];
 end
 volume = volume(:,logical(arr),:);
 arr = [];
 for zz = [1:z]
-  arr = [arr ismember(0,(unique(volume(:,:,zz)) == 1))];
+  arr = [arr ismember(0,(unique(volume(:,:,zz)) == 0))];
 end
 volume = volume(:,:,logical(arr));
 
